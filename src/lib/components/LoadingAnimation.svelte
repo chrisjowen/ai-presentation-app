@@ -6,7 +6,7 @@
 	let { message = 'Processing...' }: Props = $props();
 </script>
 
-<div class="flex flex-col items-center justify-center gap-8 animate-fade">
+<div class="flex flex-col items-center justify-center gap-8 animate-fade" data-loading="true">
 	<!-- Animated circles -->
 	<div class="relative w-32 h-32">
 		<div class="absolute inset-0 rounded-full border-4 border-purple-500 opacity-20"></div>
@@ -56,5 +56,13 @@
 
 	.animate-spin-reverse {
 		animation: spin-reverse 2s linear infinite;
+	}
+
+	/* Respect reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		.animate-spin-slow,
+		.animate-spin-reverse {
+			animation: none;
+		}
 	}
 </style>
