@@ -3,7 +3,19 @@
  * Shared type definitions for all presentation components
  */
 
-export type TransitionType = 'fade' | 'slide-left' | 'slide-right' | 'slide-up' | 'slide-down' | 'instant';
+export type TransitionType = 
+	| 'fade' 
+	| 'slide-left' 
+	| 'slide-right' 
+	| 'slide-up' 
+	| 'slide-down' 
+	| 'wipe-left'
+	| 'wipe-right'
+	| 'wipe-up'
+	| 'wipe-down'
+	| 'zoom-in'
+	| 'zoom-out'
+	| 'instant';
 
 export interface BaseComponent {
 	id: string;

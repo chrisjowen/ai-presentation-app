@@ -18,6 +18,18 @@ export function getTransitionClass(transition?: string): string {
 			return 'animate-slide-left';
 		case 'slide-right':
 			return 'animate-slide-right';
+		case 'wipe-right':
+			return 'animate-wipe-right';
+		case 'wipe-left':
+			return 'animate-wipe-left';
+		case 'wipe-up':
+			return 'animate-wipe-up';
+		case 'wipe-down':
+			return 'animate-wipe-down';
+		case 'zoom-in':
+			return 'animate-zoom-in';
+		case 'zoom-out':
+			return 'animate-zoom-out';
 		default:
 			return 'animate-fade';
 	}

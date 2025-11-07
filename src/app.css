@@ -118,6 +118,64 @@ body {
   }
 }
 
+@keyframes wipeRight {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wipeLeft {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wipeDown {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wipeUp {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Smooth animation classes with cubic-bezier easing - slower and more fluid */
 .animate-fade { 
   animation: fadeIn 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -141,6 +199,70 @@ body {
 
 .animate-bounce-subtle { 
   animation: bounceSubtle 2s ease-in-out infinite;
+}
+
+.animate-wipe-right {
+  animation: wipeRight 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.animate-wipe-left {
+  animation: wipeLeft 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.animate-wipe-down {
+  animation: wipeDown 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.animate-wipe-up {
+  animation: wipeUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.animate-zoom-out {
+  animation: zoomOut 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Professional grid system utilities */
+.grid-6-col {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-12-col {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+/* Grid span utilities */
+.col-span-1 { grid-column: span 1; }
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-4 { grid-column: span 4; }
+.col-span-5 { grid-column: span 5; }
+.col-span-6 { grid-column: span 6; }
+.col-span-7 { grid-column: span 7; }
+.col-span-8 { grid-column: span 8; }
+.col-span-9 { grid-column: span 9; }
+.col-span-10 { grid-column: span 10; }
+.col-span-11 { grid-column: span 11; }
+.col-span-12 { grid-column: span 12; }
+
+/* Responsive grid utilities */
+@media (min-width: 768px) {
+  .md\:grid-6-col {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .md\:grid-12-col {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+  }
 }
 
 /* Respect reduced motion preferences */
