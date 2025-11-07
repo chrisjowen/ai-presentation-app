@@ -6,6 +6,8 @@
 import type { Component } from '$lib/types/components';
 import type { Presentation, TimelineEvent, PresentationState } from '$lib/types/timeline';
 import { DEFAULT_MODEL_ID } from '$lib/types/models';
+import type { OpenAIVoice } from '$lib/types/tts';
+import { ttsService } from '$lib/services/tts-service';
 
 export interface DebugLog {
 	id: string;
@@ -23,13 +25,12 @@ class PresentationStore {
 	});
 
 	currentPresentation = $state<Presentation | null>(null);
-	speechSynthesis: SpeechSynthesis | null = null;
-	currentUtterance: SpeechSynthesisUtterance | null = null;
+	currentAudio: HTMLAudioElement | null = null;
 	timeoutId: number | null = null;
 
-	// Voice settings
+	// Voice settings (OpenAI TTS)
 	voiceRate = $state(1.2); // Speed
-	availableVoices = $state<SpeechSynthesisVoice[]>([]);
+	availableVoices = $state<OpenAIVoice[]>(['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']);
 	selectedVoiceIndex = $state(0);
 
 	// Navigation settings
@@ -47,24 +48,12 @@ class PresentationStore {
 	debugLogs = $state<DebugLog[]>([]);
 
 	constructor() {
-		if (typeof window !== 'undefined') {
-			this.speechSynthesis = window.speechSynthesis;
-			// Load voices
-			this.loadVoices();
-			if (this.speechSynthesis.onvoiceschanged !== undefined) {
-				this.speechSynthesis.onvoiceschanged = () => this.loadVoices();
-			}
-		}
-	}
-
-	private loadVoices() {
-		if (!this.speechSynthesis) return;
-		this.availableVoices = this.speechSynthesis.getVoices();
+		// No initialization needed for OpenAI TTS
 	}
 
 	cycleVoice() {
 		this.selectedVoiceIndex = (this.selectedVoiceIndex + 1) % this.availableVoices.length;
-		console.log('[PresentationStore] Voice changed to:', this.availableVoices[this.selectedVoiceIndex]?.name);
+		console.log('[PresentationStore] Voice changed to:', this.availableVoices[this.selectedVoiceIndex]);
 	}
 
 	adjustSpeed(delta: number) {
@@ -103,9 +92,9 @@ class PresentationStore {
 		this.state.isPaused = true;
 		this.state.isPlaying = false;
 
-		// Pause speech if active
-		if (this.speechSynthesis && this.speechSynthesis.speaking) {
-			this.speechSynthesis.pause();
+		// Pause audio if active
+		if (this.currentAudio && !this.currentAudio.paused) {
+			this.currentAudio.pause();
 		}
 
 		// Clear any pending timeouts
@@ -122,9 +111,9 @@ class PresentationStore {
 		this.state.isPaused = false;
 		this.state.isPlaying = true;
 
-		// Resume speech if paused
-		if (this.speechSynthesis && this.speechSynthesis.paused) {
-			this.speechSynthesis.resume();
+		// Resume audio if paused
+		if (this.currentAudio && this.currentAudio.paused) {
+			this.currentAudio.play();
 		}
 
 		// Continue processing events
@@ -136,9 +125,11 @@ class PresentationStore {
 		this.state.isPlaying = false;
 		this.state.isPaused = false;
 
-		// Stop speech
-		if (this.speechSynthesis) {
-			this.speechSynthesis.cancel();
+		// Stop audio
+		if (this.currentAudio) {
+			this.currentAudio.pause();
+			this.currentAudio.currentTime = 0;
+			this.currentAudio = null;
 		}
 
 		// Clear timeouts
@@ -245,54 +236,47 @@ class PresentationStore {
 		pitch: number = 1,
 		wordMarkers?: { word: string; eventIndex: number }[]
 	): Promise<void> {
-		if (!this.speechSynthesis) return;
-
 		// Set current speak text for subtitle display
 		this.currentSpeakText = text;
 
-		return new Promise((resolve) => {
-			const utterance = new SpeechSynthesisUtterance(text);
-			utterance.rate = rate || this.voiceRate; // Use global rate if not specified
-			utterance.pitch = pitch;
+		try {
+			// Get selected voice
+			const voice = this.availableVoices[this.selectedVoiceIndex];
+			const speed = rate || this.voiceRate;
 
-			// Use selected voice
-			if (this.availableVoices.length > 0) {
-				utterance.voice = this.availableVoices[this.selectedVoiceIndex];
-			}
+			// Generate audio using OpenAI TTS
+			const audioBlob = await ttsService.generateSpeech(text, voice, speed);
+			const audio = await ttsService.createAudioElement(audioBlob);
 
-			// Handle word markers for triggering events (if needed)
-			if (wordMarkers && wordMarkers.length > 0) {
-				utterance.onboundary = (event) => {
-					if (event.name === 'word') {
-						const word = text.substring(event.charIndex, event.charIndex + event.charLength);
-						const marker = wordMarkers.find((m) => m.word.toLowerCase() === word.toLowerCase());
+			this.currentAudio = audio;
 
-						if (marker && this.currentPresentation) {
-							// Trigger the specified event
-							const targetEvent = this.currentPresentation.events[marker.eventIndex];
-							if (targetEvent) {
-								this.executeEvent(targetEvent);
-							}
-						}
-					}
+			// Play audio and wait for completion
+			return new Promise((resolve) => {
+				audio.onended = () => {
+					this.currentAudio = null;
+					this.currentSpeakText = '';
+					resolve();
 				};
-			}
 
-			utterance.onend = () => {
-				this.currentUtterance = null;
-				this.currentSpeakText = ''; // Clear subtitle when speech ends
-				resolve();
-			};
+				audio.onerror = (error) => {
+					console.error('[PresentationStore] Audio playback error:', error);
+					this.currentAudio = null;
+					this.currentSpeakText = '';
+					resolve();
+				};
 
-			utterance.onerror = () => {
-				this.currentUtterance = null;
-				this.currentSpeakText = ''; // Clear subtitle on error
-				resolve();
-			};
-
-			this.currentUtterance = utterance;
-			this.speechSynthesis.speak(utterance);
-		});
+				audio.play().catch((error) => {
+					console.error('[PresentationStore] Audio play error:', error);
+					this.currentAudio = null;
+					this.currentSpeakText = '';
+					resolve();
+				});
+			});
+		} catch (error) {
+			console.error('[PresentationStore] TTS generation error:', error);
+			this.currentSpeakText = '';
+			throw error;
+		}
 	}
 
 	// Utility
