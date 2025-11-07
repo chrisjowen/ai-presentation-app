@@ -24,13 +24,13 @@
 	<div
 		class={`
 			${getTransitionClass(transition)}
-			text-xl md:text-2xl prose prose-invert prose-lg max-w-none
+			text-2xl md:text-3xl prose prose-invert prose-xl max-w-none leading-relaxed-plus
 			${component.align === 'center' ? 'text-center' : ''}
 			${component.align === 'right' ? 'text-right' : ''}
 			${component.align === 'left' || !component.align ? 'text-left' : ''}
 			${component.className || ''}
 		`}
-		style={component.color ? `color: ${component.color}` : ''}
+		style={component.color ? `color: ${component.color}` : 'color: rgba(255, 255, 255, 0.9)'}
 	>
 		{@html renderedContent}
 	</div>
@@ -38,16 +38,17 @@
 	<div
 		class={`
 			${getTransitionClass(transition)}
-			${component.variant === 'heading' ? 'text-5xl md:text-7xl font-bold mb-6' : ''}
-			${component.variant === 'subheading' ? 'text-3xl md:text-4xl font-semibold mb-4' : ''}
-			${component.variant === 'caption' ? 'text-base md:text-lg text-gray-400' : ''}
+			${component.variant === 'heading' ? 'text-6xl md:text-8xl lg:text-9xl font-bold mb-8 tracking-tight leading-none' : ''}
+			${component.variant === 'subheading' ? 'text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 tracking-tight' : ''}
+			${component.variant === 'caption' ? 'text-xl md:text-2xl text-slate-400 font-light' : ''}
 			${component.align === 'center' ? 'text-center' : ''}
 			${component.align === 'right' ? 'text-right' : ''}
 			${component.align === 'left' || !component.align ? 'text-left' : ''}
+			${component.gradient ? 'text-gradient' : ''}
 			whitespace-pre-wrap
 			${component.className || ''}
 		`}
-		style={component.color ? `color: ${component.color}` : 'color: rgba(255, 255, 255, 0.98)'}
+		style={component.color ? `color: ${component.color}` : component.variant === 'heading' ? 'color: rgba(255, 255, 255, 0.98)' : 'color: rgba(255, 255, 255, 0.9)'}
 	>
 		{component.content}
 	</div>
