@@ -14,7 +14,7 @@
 	let modalInput: HTMLInputElement;
 
 	// Get components from presentation store
-	const components = $derived(presentationStore.components);
+	const components = $derived(presentationStore.state.components);
 
 	onMount(() => {
 		// Initialize speech recognition
@@ -82,7 +82,7 @@
 
 		// Show question as hero while processing
 		currentQuestion = input;
-		presentationStore.clear();
+		presentationStore.stop();
 		isProcessing = true;
 		showModal = false;
 
@@ -99,30 +99,35 @@
 			if (response.ok) {
 				const data = await response.json();
 
-				// Clear and add question header first
-				presentationStore.clear();
-				presentationStore.addComponent({
-					id: 'question-header',
-					type: 'heading',
-					content: {
-						text: currentQuestion,
-						level: 2
-					}
-				});
+				// Build presentation with question header + response events
+				const events: any[] = [
+					{
+						type: 'clear',
+						transition: 'fade'
+					},
+					{
+						type: 'add',
+						component: {
+							id: 'question-header',
+							type: 'text',
+							content: currentQuestion,
+							variant: 'heading',
+							align: 'left'
+						},
+						transition: 'fade'
+					},
+					...data.events
+				];
 
-				// Execute timeline events if provided
-				if (data.events && data.events.length > 0) {
-					// Load events into presentation store
-					const presentation = {
-						id: `chat-${Date.now()}`,
-						sessionId,
-						events: data.events,
-						createdAt: Date.now()
-					};
-					
-					await presentationStore.loadPresentation(presentation);
-					presentationStore.play();
-				}
+				const presentation = {
+					id: `chat-${Date.now()}`,
+					sessionId,
+					events,
+					createdAt: Date.now()
+				};
+				
+				await presentationStore.loadPresentation(presentation);
+				presentationStore.play();
 			}
 		} catch (error) {
 			console.error('Failed to send message:', error);
