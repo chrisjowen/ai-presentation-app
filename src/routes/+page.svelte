@@ -1,0 +1,60 @@
+<script lang="ts">
+	import { goto } from '$app/navigation';
+
+	function createNewSession() {
+		const sessionId = `session-${Date.now()}`;
+		goto(`/session/${sessionId}`);
+	}
+
+	function loadDemoSession() {
+		goto('/demo');
+	}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white flex items-center justify-center p-8">
+	<div class="max-w-4xl mx-auto text-center">
+		<h1 class="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+			AI Explainer
+		</h1>
+
+		<p class="text-2xl md:text-3xl mb-12 text-gray-300">
+			Experience AI agents like never before. No chat, just immersive presentations.
+		</p>
+
+		<div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+			<button
+				on:click={loadDemoSession}
+				class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg text-xl font-semibold transition-all transform hover:scale-105"
+			>
+				View Demo
+			</button>
+
+			<button
+				on:click={createNewSession}
+				class="px-8 py-4 bg-slate-700 hover:bg-slate-600 rounded-lg text-xl font-semibold transition-all"
+			>
+				Create New Session
+			</button>
+		</div>
+
+		<div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+			<div class="bg-slate-800 bg-opacity-50 p-6 rounded-lg">
+				<div class="text-4xl mb-4">🎭</div>
+				<h3 class="text-xl font-semibold mb-2">Dynamic Visuals</h3>
+				<p class="text-gray-400">Text, images, and layouts that update in real-time</p>
+			</div>
+
+			<div class="bg-slate-800 bg-opacity-50 p-6 rounded-lg">
+				<div class="text-4xl mb-4">🎙️</div>
+				<h3 class="text-xl font-semibold mb-2">Voice Narration</h3>
+				<p class="text-gray-400">Synchronized text-to-speech with visual changes</p>
+			</div>
+
+			<div class="bg-slate-800 bg-opacity-50 p-6 rounded-lg">
+				<div class="text-4xl mb-4">⚡</div>
+				<h3 class="text-xl font-semibold mb-2">Interactive</h3>
+				<p class="text-gray-400">Pause and ask questions anytime with voice input</p>
+			</div>
+		</div>
+	</div>
+</div>
