@@ -12,6 +12,7 @@
 
 	let sessionId = $state(`chat-${Date.now()}`);
 	let currentSlide = $state<Component | null>(null);
+	let currentQuestion = $state<string>('');
 	let isListening = $state(false);
 	let isProcessing = $state(false);
 	let recognition: any = null;
@@ -83,8 +84,11 @@
 	async function handleUserInput(input: string) {
 		if (!input.trim() || isProcessing) return;
 
+		// Show question as hero while processing
+		currentQuestion = input;
+		currentSlide = null;
 		isProcessing = true;
-		showModal = false; // Hide modal after submission
+		showModal = false;
 
 		try {
 			const response = await fetch('/api/chat', {
@@ -99,10 +103,29 @@
 			if (response.ok) {
 				const data = await response.json();
 
-				// Update the single slide with the latest component
+				// Create a slide with question as header + response components
 				if (data.components && data.components.length > 0) {
-					// Take the first component as the current slide
-					currentSlide = data.components[0];
+					// Build a grid with question header + all response components
+					currentSlide = {
+						id: `response-${Date.now()}`,
+						type: 'grid',
+						content: {
+							columns: 1,
+							gap: 'large',
+							items: [
+								// Question as header
+								{
+									type: 'heading',
+									content: {
+										text: currentQuestion,
+										level: 2
+									}
+								},
+								// All response components
+								...data.components
+							]
+						}
+					};
 				}
 
 				// Speak the response
@@ -173,16 +196,26 @@
 	<!-- Main Content - Single Slide -->
 	<div class="pt-24 pb-32 px-8 flex items-center justify-center min-h-[calc(100vh-12rem)]">
 		<div class="max-w-5xl w-full">
-			{#if currentSlide}
+			{#if isProcessing && currentQuestion}
+				<!-- Show question as hero while processing -->
+				<div class="text-center py-20 animate-pulse">
+					<h1 class="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+						{currentQuestion}
+					</h1>
+					<div class="text-slate-400">Thinking...</div>
+				</div>
+			{:else if currentSlide}
+				<!-- Show response with question as header -->
 				<div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-12 transition-all duration-500">
 					<ComponentRenderer component={currentSlide} />
 				</div>
 			{:else}
+				<!-- Empty state -->
 				<div class="text-center py-20">
 					<div class="text-8xl mb-8">🎙️</div>
 					<h2 class="text-4xl font-bold mb-4">Start a Conversation</h2>
 					<p class="text-xl text-slate-400">
-						Click the microphone or hover at the bottom to begin
+						Press <kbd class="px-3 py-1 bg-slate-800 rounded text-sm">Cmd+E</kbd> or click the microphone
 					</p>
 				</div>
 			{/if}
