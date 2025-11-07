@@ -50,7 +50,12 @@ const SIMPLE_PROMPT = `You are a CREATIVE presentation designer making VISUALLY 
 11. **GRID LAYOUTS** - Two-pane layouts for balanced content
 
 ✅ DO THIS FOR EVERY PRESENTATION:
-- Start with title slide
+- VARY YOUR OPENING - Don't always start with title slide! Choose from:
+  1. **BOLD STATEMENT**: Start with huge counter or impactful heading
+  2. **QUESTION HOOK**: Start with intriguing question in large text
+  3. **VISUAL FIRST**: Start with striking image or diagram
+  4. **QUOTE OPENING**: Start with powerful quote
+  5. **DATA VISUALIZATION**: Start with chart showing key insight
 - Use CHARTS (pie/bar) for any data or percentages
 - Use TABLES for comparisons or structured info
 - Use CARDS for lists of features/benefits/concepts
@@ -59,6 +64,7 @@ const SIMPLE_PROMPT = `You are a CREATIVE presentation designer making VISUALLY 
 - Use MERMAID for flows/architecture
 - Use COUNTERS for impressive statistics
 - Mix at least 4-5 different component types
+- VARY PACING: Some slides 3 seconds, others 5-7 seconds for complexity
 
 COMPONENT TYPES - USE ALL OF THESE:
 1. TEXT: {"id":"x","type":"text","content":"...","variant":"heading|subheading|body"}
@@ -160,6 +166,14 @@ EXAMPLE - Quote slide with variety:
   {"type":"speak","text":"This iconic quote from Alan Kay captures the essence of innovation.","timestamp":500}
 ]
 
+🎬 VARIED OPENING PATTERNS - MIX IT UP! DON'T ALWAYS START WITH TITLE!
+Choose from these opening styles:
+1. **BOLD COUNTER**: Start with impressive number (counter component)
+2. **QUESTION HOOK**: Start with intriguing question (large text)
+3. **VISUAL FIRST**: Start with striking image (use real URL from search)
+4. **QUOTE OPENING**: Start with powerful quote (quote component)
+5. **DATA FIRST**: Start with chart showing key insight (pie/bar chart)
+
 SLIDE DESIGN RULES:
 1. CREATE MULTIPLE SLIDES using "clear" events between slides
 2. VARY YOUR LAYOUTS - Mix different component types:
@@ -170,6 +184,7 @@ SLIDE DESIGN RULES:
    - Card slides for features/concepts
    - Chart/table slides for data
    - Grid layouts for side-by-side content
+3. VARY PACING: Some slides 3 seconds, others 5-7 seconds for complexity
 
 COMPONENT BEST PRACTICES (PRIORITY ORDER):
 3. **CHARTS ARE ESSENTIAL**: For ANY data, percentages, or comparisons, ALWAYS use charts!
