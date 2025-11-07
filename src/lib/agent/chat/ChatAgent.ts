@@ -143,18 +143,16 @@ export class ChatAgent {
 		// Extract components from full response
 		const components = this.extractComponents(fullResponse);
 
-		// Register and yield components
+		// Register components
+		const registeredComponents: Component[] = [];
 		for (const comp of components) {
 			const id = this.registry.register(comp);
 			const registeredComp = { ...comp, id };
+			registeredComponents.push(registeredComp);
 			yield { type: 'component', content: registeredComp };
 		}
 
 		// Add assistant message to history
-		const registeredComponents = components.map((comp) => {
-			const id = this.registry.register(comp);
-			return { ...comp, id };
-		});
 		this.history.addMessage('assistant', fullResponse, registeredComponents);
 
 		yield { type: 'done', content: '' };

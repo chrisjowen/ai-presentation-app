@@ -692,7 +692,7 @@ Respond with a JSON array of ONLY the NEW events for slide 2 (don't repeat slide
 			// ============================================
 			console.log('[SimpleAgent] 🔍 Starting background searches...');
 
-			const imageSearchPromise = this.executeTool('search_images', {
+			const imageSearchPromise2 = this.executeTool('search_images', {
 				query: userMessage,
 				count: 5
 			});
@@ -716,7 +716,7 @@ Respond with a JSON array of ONLY the NEW events for slide 2 (don't repeat slide
 				if (!toolsReady) {
 					// Try to get tool results without waiting
 					const imageResults = await Promise.race([
-						imageSearchPromise,
+						imageSearchPromise2,
 						new Promise(resolve => setTimeout(() => resolve(null), 0))
 					]);
 
