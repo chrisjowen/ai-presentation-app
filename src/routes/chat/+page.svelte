@@ -103,7 +103,7 @@
 	async function speakText(text: string) {
 		try {
 			// Use OpenAI TTS API
-			const response = await fetch('/api/tts', {
+			const response = await fetch('/api/tts/generate', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ text })
@@ -127,7 +127,7 @@
 		if (textInput.trim()) {
 			handleUserInput(textInput);
 			textInput = '';
-			showTextInput = false;
+			showInput = false;
 		}
 	}
 
