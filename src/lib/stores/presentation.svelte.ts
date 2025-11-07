@@ -29,7 +29,7 @@ class PresentationStore {
 	timeoutId: number | null = null;
 
 	// Voice settings (OpenAI TTS)
-	voiceRate = $state(1.2); // Speed
+	voiceRate = $state(1.0); // Speed (1.0 = normal)
 	availableVoices = $state<OpenAIVoice[]>(['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']);
 	selectedVoiceIndex = $state(0);
 

@@ -49,7 +49,7 @@ export interface FadeSlideParams {
  */
 export function fadeSlide(
 	node: Element,
-	{ delay = 0, duration = 600, easing = cubicOut, y = 10, x = 0 }: FadeSlideParams = {}
+	{ delay = 0, duration = 400, easing = cubicOut, y = 10, x = 0 }: FadeSlideParams = {}
 ): TransitionConfig {
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	
@@ -84,7 +84,7 @@ export function fadeSlide(
  */
 export function scaleFade(
 	node: Element,
-	{ delay = 0, duration = 600, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
+	{ delay = 0, duration = 400, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
 ): TransitionConfig {
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	
@@ -118,7 +118,7 @@ export function scaleFade(
  */
 export function blurFade(
 	node: Element,
-	{ delay = 0, duration = 600, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
+	{ delay = 0, duration = 400, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
 ): TransitionConfig {
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	

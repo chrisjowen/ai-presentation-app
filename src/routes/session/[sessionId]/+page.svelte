@@ -466,14 +466,14 @@
 	<!-- Main presentation area -->
 	<div
 		bind:this={contentContainer}
-		class="flex-1 w-full flex justify-center items-center p-8 relative z-10 overflow-y-auto scroll-smooth transition-all duration-700 ease-out"
+		class="flex-1 w-full flex justify-center items-center p-8 relative z-10 overflow-y-auto scroll-smooth transition-all duration-300 ease-out"
 	>
-		<div class="w-full max-w-7xl mx-auto transition-all duration-700 ease-out">
+		<div class="w-full max-w-7xl mx-auto transition-all duration-300 ease-out">
 			{#if presentationStore.isProcessing}
 				<!-- Loading animation -->
 				<LoadingAnimation message="Processing your request..." />
 			{:else if presentationStore.state.components.length > 0}
-				<div class="flex flex-col items-center justify-center gap-8 w-full transition-all duration-700 ease-out">
+				<div class="flex flex-col items-center justify-center gap-8 w-full transition-all duration-300 ease-out">
 					{#each presentationStore.state.components as component (component.id)}
 						<ComponentRenderer {component} transition={component.transition || 'fade'} />
 					{/each}
