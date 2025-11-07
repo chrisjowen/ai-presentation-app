@@ -15,9 +15,10 @@ export class ComponentRegistry {
 
 	/**
 	 * Register a new component and return its unique ID
+	 * If component already has an ID, use it; otherwise generate one
 	 */
-	register(component: Omit<Component, 'id'>): string {
-		const id = this.generateId();
+	register(component: Component | Omit<Component, 'id'>): string {
+		const id = 'id' in component && component.id ? component.id : this.generateId();
 		const fullComponent: Component = {
 			...component,
 			id,
