@@ -19,18 +19,18 @@
 	const style = variantStyles[component.variant || 'default'];
 </script>
 
-<div class={`w-full max-w-3xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
-	<div class={`${style} backdrop-blur-sm rounded-xl p-6 border-l-4 border shadow-lg`}>
-		<div class="flex gap-4">
-			{#if component.icon}
-				<div class="text-4xl flex-shrink-0">{component.icon}</div>
-			{/if}
-			<div class="flex-1">
-				<div class="text-xl leading-relaxed whitespace-pre-wrap italic">{component.content}</div>
-				{#if component.author}
-					<div class="mt-4 text-sm text-gray-400">— {component.author}</div>
-				{/if}
-			</div>
-		</div>
+<div class={`w-full max-w-5xl mx-auto ${getTransitionClass(transition)} ${component.className || ''} py-8`}>
+	<div class="relative">
+		{#if component.icon}
+			<div class="text-6xl md:text-7xl mb-8 opacity-80">{component.icon}</div>
+		{/if}
+		<blockquote class="text-3xl md:text-4xl lg:text-5xl font-light leading-relaxed italic text-slate-100">
+			"{component.content}"
+		</blockquote>
+		{#if component.author}
+			<div class="mt-8 text-2xl md:text-3xl text-slate-400 font-normal">— {component.author}</div>
+		{/if}
+		<!-- Subtle accent line -->
+		<div class="absolute -left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-blue-500 rounded-full"></div>
 	</div>
 </div>

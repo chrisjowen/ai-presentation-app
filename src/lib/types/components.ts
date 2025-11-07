@@ -29,6 +29,7 @@ export interface ImageComponent extends BaseComponent {
 	src: string;
 	alt?: string;
 	fit?: 'contain' | 'cover' | 'fill';
+	fullBleed?: boolean; // Edge-to-edge image
 	className?: string;
 }
 
@@ -168,6 +169,38 @@ export interface SeparatorComponent extends BaseComponent {
 	thickness?: 'thin' | 'medium' | 'thick';
 }
 
+// Hero Component - Full-bleed image with text overlay
+export interface HeroComponent extends BaseComponent {
+	type: 'hero';
+	backgroundImage: string;
+	heading?: string;
+	subheading?: string;
+	overlay?: 'light' | 'dark' | 'heavy';
+	textAlign?: 'left' | 'center' | 'right';
+}
+
+// Statement Component - Huge text, minimal design
+export interface StatementComponent extends BaseComponent {
+	type: 'statement';
+	text: string;
+	size?: 'md' | 'lg' | 'xl';
+	gradient?: boolean;
+}
+
+// Split Layout Component - Asymmetric image + content
+export interface SplitLayoutComponent extends BaseComponent {
+	type: 'split';
+	imageUrl: string;
+	imageAlt?: string;
+	imageSide?: 'left' | 'right';
+	ratio?: '60/40' | '70/30' | '40/60' | '30/70';
+	content: {
+		heading?: string;
+		subheading?: string;
+		points?: string[];
+	};
+}
+
 // Union type of all components
 export type Component =
 	| TextComponent
@@ -186,7 +219,10 @@ export type Component =
 	| ProgressComponent
 	| BadgeComponent
 	| AlertComponent
-	| SeparatorComponent;
+	| SeparatorComponent
+	| HeroComponent
+	| StatementComponent
+	| SplitLayoutComponent;
 
 // Component Registry metadata for agent reference
 export interface ComponentDefinition {

@@ -18,20 +18,20 @@
 	let { component, transition = 'fade' }: Props = $props();
 </script>
 
-<div class={`w-full overflow-x-auto ${getTransitionClass(transition)}`}>
-	<table class="w-full border-collapse bg-slate-800 rounded-lg overflow-hidden">
+<div class={`w-full max-w-6xl mx-auto overflow-x-auto ${getTransitionClass(transition)}`}>
+	<table class="w-full border-collapse">
 		<thead>
-			<tr class="bg-slate-700">
+			<tr class="border-b-2 border-slate-700">
 				{#each component.headers as header}
-					<th class="px-6 py-3 text-left text-sm font-semibold text-white border-b border-slate-600">{header}</th>
+					<th class="px-8 py-6 text-left text-lg md:text-xl font-semibold text-slate-200">{header}</th>
 				{/each}
 			</tr>
 		</thead>
 		<tbody>
 			{#each component.rows as row, i}
-				<tr class="hover:bg-slate-700 transition-colors {i % 2 === 0 ? 'bg-slate-800' : 'bg-slate-750'}">
+				<tr class="border-b border-slate-800 hover:bg-slate-900/30 transition-colors">
 					{#each row as cell}
-						<td class="px-6 py-4 text-sm text-gray-300 border-b border-slate-700">{cell}</td>
+						<td class="px-8 py-6 text-base md:text-lg text-slate-300">{cell}</td>
 					{/each}
 				</tr>
 			{/each}

@@ -36,21 +36,21 @@
 
 <div class={`flex flex-col items-center ${getTransitionClass(transition)} ${component.className || ''}`}>
 	{#if component.title}
-		<h3 class="text-2xl font-semibold mb-4">{component.title}</h3>
+		<h3 class="text-3xl md:text-4xl lg:text-5xl font-semibold mb-12">{component.title}</h3>
 	{/if}
 
-	<div class="flex gap-8 items-center">
-		<svg viewBox="0 0 100 100" class="w-64 h-64">
+	<div class="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
+		<svg viewBox="0 0 100 100" class="w-80 h-80 md:w-96 md:h-96">
 			{#each slices as slice}
-				<path d={slice.path} fill={slice.color} stroke="white" stroke-width="0.5" class="transition-all hover:opacity-80" />
+				<path d={slice.path} fill={slice.color} stroke="#0f172a" stroke-width="0.5" class="transition-all hover:opacity-80" />
 			{/each}
 		</svg>
 
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-4">
 			{#each slices as slice}
-				<div class="flex items-center gap-2">
-					<div class="w-4 h-4 rounded" style="background-color: {slice.color}"></div>
-					<span class="text-sm">{slice.label}: {slice.percentage.toFixed(1)}%</span>
+				<div class="flex items-center gap-4">
+					<div class="w-6 h-6 rounded-lg" style="background-color: {slice.color}"></div>
+					<span class="text-lg md:text-xl">{slice.label}: <span class="font-semibold">{slice.percentage.toFixed(1)}%</span></span>
 				</div>
 			{/each}
 		</div>

@@ -17,6 +17,9 @@
 	import BadgeComponent from './BadgeComponent.svelte';
 	import AlertComponent from './AlertComponent.svelte';
 	import SeparatorComponent from './SeparatorComponent.svelte';
+	import HeroComponent from './HeroComponent.svelte';
+	import StatementComponent from './StatementComponent.svelte';
+	import SplitLayoutComponent from './SplitLayoutComponent.svelte';
 
 	interface Props {
 		component: Component;
@@ -61,5 +64,11 @@
 		<AlertComponent component={component} {transition} />
 	{:else if component.type === 'separator'}
 		<SeparatorComponent component={component} {transition} />
+	{:else if component.type === 'hero'}
+		<HeroComponent component={component} {transition} />
+	{:else if component.type === 'statement'}
+		<StatementComponent component={component} {transition} />
+	{:else if component.type === 'split'}
+		<SplitLayoutComponent component={component} {transition} />
 	{/if}
 </div>
