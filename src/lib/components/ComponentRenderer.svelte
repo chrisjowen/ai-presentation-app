@@ -20,6 +20,9 @@
 	import HeroComponent from './HeroComponent.svelte';
 	import StatementComponent from './StatementComponent.svelte';
 	import SplitLayoutComponent from './SplitLayoutComponent.svelte';
+	import TitleSlideComponent from './TitleSlideComponent.svelte';
+	import SectionDividerComponent from './SectionDividerComponent.svelte';
+	import ContentSlideComponent from './ContentSlideComponent.svelte';
 
 	interface Props {
 		component: Component;
@@ -70,5 +73,11 @@
 		<StatementComponent component={component} {transition} />
 	{:else if component.type === 'split'}
 		<SplitLayoutComponent component={component} {transition} />
+	{:else if component.type === 'title-slide'}
+		<TitleSlideComponent component={component} {transition} />
+	{:else if component.type === 'section-divider'}
+		<SectionDividerComponent component={component} {transition} />
+	{:else if component.type === 'content-slide'}
+		<ContentSlideComponent component={component} {transition} />
 	{/if}
 </div>

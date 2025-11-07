@@ -201,6 +201,41 @@ export interface SplitLayoutComponent extends BaseComponent {
 	};
 }
 
+// Title Slide Component - Professional title slide with branding
+export interface TitleSlideComponent extends BaseComponent {
+	type: 'title-slide';
+	title: string;
+	subtitle?: string;
+	author?: string;
+	date?: string;
+	backgroundImage?: string;
+	overlay?: 'light' | 'dark' | 'heavy' | 'none';
+	className?: string;
+}
+
+// Section Divider Component - Visual break between sections
+export interface SectionDividerComponent extends BaseComponent {
+	type: 'section-divider';
+	title: string;
+	subtitle?: string;
+	number?: number;
+	icon?: string;
+	backgroundImage?: string;
+	className?: string;
+}
+
+// Content Slide Component - Grid-based professional layout
+export interface ContentSlideComponent extends BaseComponent {
+	type: 'content-slide';
+	header?: {
+		title: string;
+		subtitle?: string;
+	};
+	layout: '1-column' | '2-column' | '3-column' | '2-column-wide-left' | '2-column-wide-right';
+	content: Component[][];
+	className?: string;
+}
+
 // Union type of all components
 export type Component =
 	| TextComponent
@@ -222,7 +257,10 @@ export type Component =
 	| SeparatorComponent
 	| HeroComponent
 	| StatementComponent
-	| SplitLayoutComponent;
+	| SplitLayoutComponent
+	| TitleSlideComponent
+	| SectionDividerComponent
+	| ContentSlideComponent;
 
 // Component Registry metadata for agent reference
 export interface ComponentDefinition {
