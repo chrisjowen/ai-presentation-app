@@ -1,17 +1,10 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import ComponentRenderer from '$lib/components/ComponentRenderer.svelte';
+	import { presentationStore } from '$lib/stores/presentation.svelte';
 	import type { Component } from '$lib/agent/chat/prompts/types';
 
-	interface Message {
-		role: 'user' | 'assistant';
-		content: string;
-		components?: Component[];
-		timestamp: number;
-	}
-
 	let sessionId = $state(`chat-${Date.now()}`);
-	let currentSlide = $state<Component | null>(null);
 	let currentQuestion = $state<string>('');
 	let isListening = $state(false);
 	let isProcessing = $state(false);
@@ -19,6 +12,9 @@
 	let textInput = $state('');
 	let showModal = $state(false);
 	let modalInput: HTMLInputElement;
+
+	// Get components from presentation store
+	const components = $derived(presentationStore.components);
 
 	onMount(() => {
 		// Initialize speech recognition
@@ -86,7 +82,7 @@
 
 		// Show question as hero while processing
 		currentQuestion = input;
-		currentSlide = null;
+		presentationStore.clear();
 		isProcessing = true;
 		showModal = false;
 
@@ -103,33 +99,30 @@
 			if (response.ok) {
 				const data = await response.json();
 
-				// Create a slide with question as header + response components
-				if (data.components && data.components.length > 0) {
-					// Build a grid with question header + all response components
-					currentSlide = {
-						id: `response-${Date.now()}`,
-						type: 'grid',
-						content: {
-							columns: 1,
-							gap: 'large',
-							items: [
-								// Question as header
-								{
-									type: 'heading',
-									content: {
-										text: currentQuestion,
-										level: 2
-									}
-								},
-								// All response components
-								...data.components
-							]
-						}
-					};
-				}
+				// Clear and add question header first
+				presentationStore.clear();
+				presentationStore.addComponent({
+					id: 'question-header',
+					type: 'heading',
+					content: {
+						text: currentQuestion,
+						level: 2
+					}
+				});
 
-				// Speak the response
-				speakText(data.text);
+				// Execute timeline events if provided
+				if (data.events && data.events.length > 0) {
+					// Load events into presentation store
+					const presentation = {
+						id: `chat-${Date.now()}`,
+						sessionId,
+						events: data.events,
+						createdAt: Date.now()
+					};
+					
+					await presentationStore.loadPresentation(presentation);
+					presentationStore.play();
+				}
 			}
 		} catch (error) {
 			console.error('Failed to send message:', error);
@@ -138,32 +131,7 @@
 		}
 	}
 
-	async function speakText(text: string) {
-		try {
-			// Use OpenAI TTS API
-			const response = await fetch('/api/tts/generate', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ 
-					text,
-					voice: 'nova',
-					speed: 1.0
-				})
-			});
 
-			if (response.ok) {
-				const audioBlob = await response.blob();
-				const audioUrl = URL.createObjectURL(audioBlob);
-				const audio = new Audio(audioUrl);
-				audio.play();
-				
-				// Clean up URL after playing
-				audio.onended = () => URL.revokeObjectURL(audioUrl);
-			}
-		} catch (error) {
-			console.error('TTS error:', error);
-		}
-	}
 
 	function handleTextSubmit() {
 		if (textInput.trim()) {
@@ -193,7 +161,7 @@
 		</div>
 	</div>
 
-	<!-- Main Content - Single Slide -->
+	<!-- Main Content - Presentation Components -->
 	<div class="pt-24 pb-32 px-8 flex items-center justify-center min-h-[calc(100vh-12rem)]">
 		<div class="max-w-5xl w-full">
 			{#if isProcessing && currentQuestion}
@@ -204,10 +172,14 @@
 					</h1>
 					<div class="text-slate-400">Thinking...</div>
 				</div>
-			{:else if currentSlide}
-				<!-- Show response with question as header -->
-				<div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-12 transition-all duration-500">
-					<ComponentRenderer component={currentSlide} />
+			{:else if components.length > 0}
+				<!-- Show components from presentation store -->
+				<div class="space-y-8">
+					{#each components as component (component.id)}
+						<div class="transition-all duration-500">
+							<ComponentRenderer {component} />
+						</div>
+					{/each}
 				</div>
 			{:else}
 				<!-- Empty state -->

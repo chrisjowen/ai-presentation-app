@@ -49,10 +49,33 @@ export const POST: RequestHandler = async ({ request }) => {
 		// Get response
 		const response = await agent.chat(message);
 
+		// Convert components to timeline events
+		const events: any[] = [];
+		
+		// Add speak event
+		if (response.text) {
+			events.push({
+				type: 'speak',
+				text: response.text,
+				timestamp: 0
+			});
+		}
+
+		// Add component events
+		response.components.forEach((component, index) => {
+			events.push({
+				type: 'add',
+				component,
+				transition: 'fade',
+				timestamp: index * 300 // Stagger components
+			});
+		});
+
 		return json({
 			success: true,
 			text: response.text,
 			components: response.components,
+			events, // Timeline events for presentation store
 			conversationId: response.conversationId
 		});
 	} catch (error) {
