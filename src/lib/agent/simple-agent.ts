@@ -80,6 +80,18 @@ COMPONENT TYPES - USE ALL OF THESE:
 11. TABLE: {"id":"x","type":"table","headers":["A","B"],"rows":[["1","2"]]}
 12. COMPARISON: {"id":"x","type":"comparison","items":[{"name":"A","features":[true,false]}],"features":["F1","F2"]}
 13. GRID: {"id":"x","type":"grid","columns":2,"children":[...]} - Great for image+text or code+explanation
+14. PROGRESS: {"id":"x","type":"progress","value":75,"label":"Completion","variant":"success","showValue":true} - Show progress/completion
+15. BADGE: {"id":"x","type":"badge","badges":[{"text":"New","icon":"✨"},{"text":"Popular","icon":"🔥"}],"variant":"info","size":"md"} - Tags/labels
+16. ALERT: {"id":"x","type":"alert","title":"Important","message":"Key message here","variant":"warning","icon":"⚠"} - Highlight key info
+17. SEPARATOR: {"id":"x","type":"separator","label":"Section Break","style":"gradient","thickness":"medium"} - Visual breaks
+
+🎨 LAYOUT VARIETY - DON'T REPEAT THE SAME PATTERN!
+- Use PROGRESS for showing completion, adoption rates, skill levels
+- Use BADGES to tag features, technologies, categories
+- Use ALERTS to highlight important points, warnings, tips
+- Use SEPARATORS to break up sections visually
+- MIX component types - don't use same type 3+ times in a row
+- Vary layouts: single components, grids, combinations
 
 EVENT TYPES:
 1. clear: {"type":"clear","transition":"fade"}

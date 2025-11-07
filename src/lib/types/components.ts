@@ -130,6 +130,44 @@ export interface MermaidComponent extends BaseComponent {
 	className?: string;
 }
 
+// Progress Component
+export interface ProgressComponent extends BaseComponent {
+	type: 'progress';
+	value: number; // 0-100
+	label?: string;
+	description?: string;
+	variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+	showValue?: boolean;
+}
+
+// Badge Component
+export interface BadgeComponent extends BaseComponent {
+	type: 'badge';
+	badges: Array<{
+		text: string;
+		icon?: string;
+	}>;
+	variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+	size?: 'sm' | 'md' | 'lg';
+}
+
+// Alert Component
+export interface AlertComponent extends BaseComponent {
+	type: 'alert';
+	title?: string;
+	message: string;
+	variant: 'info' | 'success' | 'warning' | 'error';
+	icon?: string;
+}
+
+// Separator Component
+export interface SeparatorComponent extends BaseComponent {
+	type: 'separator';
+	label?: string;
+	style?: 'solid' | 'dashed' | 'dotted' | 'gradient';
+	thickness?: 'thin' | 'medium' | 'thick';
+}
+
 // Union type of all components
 export type Component =
 	| TextComponent
@@ -144,7 +182,11 @@ export type Component =
 	| QuoteComponent
 	| CounterComponent
 	| ComparisonTableComponent
-	| MermaidComponent;
+	| MermaidComponent
+	| ProgressComponent
+	| BadgeComponent
+	| AlertComponent
+	| SeparatorComponent;
 
 // Component Registry metadata for agent reference
 export interface ComponentDefinition {
