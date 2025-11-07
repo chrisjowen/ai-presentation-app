@@ -11,7 +11,7 @@
 	}
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white flex items-center justify-center p-8">
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-8">
 	<div class="max-w-4xl mx-auto text-center">
 		<h1 class="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
 			AI Explainer
@@ -38,22 +38,22 @@
 		</div>
 
 		<div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-			<div class="bg-slate-800 bg-opacity-50 p-6 rounded-lg">
+			<div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-6 rounded-xl hover:bg-slate-900/70 transition-all">
 				<div class="text-4xl mb-4">🎭</div>
 				<h3 class="text-xl font-semibold mb-2">Dynamic Visuals</h3>
-				<p class="text-gray-400">Text, images, and layouts that update in real-time</p>
+				<p class="text-slate-400">Text, images, and layouts that update in real-time</p>
 			</div>
 
-			<div class="bg-slate-800 bg-opacity-50 p-6 rounded-lg">
+			<div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-6 rounded-xl hover:bg-slate-900/70 transition-all">
 				<div class="text-4xl mb-4">🎙️</div>
 				<h3 class="text-xl font-semibold mb-2">Voice Narration</h3>
-				<p class="text-gray-400">Synchronized text-to-speech with visual changes</p>
+				<p class="text-slate-400">Synchronized text-to-speech with visual changes</p>
 			</div>
 
-			<div class="bg-slate-800 bg-opacity-50 p-6 rounded-lg">
+			<div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-6 rounded-xl hover:bg-slate-900/70 transition-all">
 				<div class="text-4xl mb-4">⚡</div>
 				<h3 class="text-xl font-semibold mb-2">Interactive</h3>
-				<p class="text-gray-400">Pause and ask questions anytime with voice input</p>
+				<p class="text-slate-400">Pause and ask questions anytime with voice input</p>
 			</div>
 		</div>
 	</div>
