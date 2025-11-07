@@ -6,6 +6,7 @@
 	import DebugPanel from '$lib/components/DebugPanel.svelte';
 	import SlideHeader from '$lib/components/SlideHeader.svelte';
 	import SlideFooter from '$lib/components/SlideFooter.svelte';
+	import ChatMode from '$lib/components/ChatMode.svelte';
 	import type { Presentation } from '$lib/types/timeline';
 	import { THEMES } from '$lib/types/theme';
 	import { AVAILABLE_MODELS, getModelById } from '$lib/types/models';
@@ -33,6 +34,7 @@
 	let chatInputElement = $state<HTMLTextAreaElement | undefined>(undefined);
 	let showShortcuts = $state(false); // Hidden by default
 	let showDebugPanel = $state(false);
+	let showChatMode = $state(false); // Toggle for interactive chat mode
 	let contentContainer: HTMLDivElement;
 	let autoScrollInterval: NodeJS.Timeout | null = null;
 	let streamComplete = $state(true); // Track if the streaming response is complete
@@ -190,6 +192,15 @@
 			// Cmd/Ctrl+K - open quick chat
 			event.preventDefault();
 			openQuickChat();
+		} else if (event.code === 'KeyC') {
+			// C key - toggle chat mode
+			event.preventDefault();
+			showChatMode = !showChatMode;
+			if (showChatMode) {
+				presentationStore.pause();
+			} else {
+				presentationStore.resume();
+			}
 		} else if (event.code === 'KeyS') {
 			// S key - toggle shortcuts menu
 			event.preventDefault();
@@ -439,15 +450,26 @@
 
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
-<div
-	class="w-screen h-screen overflow-hidden flex flex-col"
-	style={`
-		${currentTheme.background.type === 'color' ? `background: ${currentTheme.background.value};` : ''}
-		${currentTheme.background.type === 'gradient' ? `background: ${currentTheme.background.value};` : ''}
-		${currentTheme.background.type === 'image' ? `background: url(${currentTheme.background.value}) center/cover;` : ''}
-		color: ${currentTheme.colors.text};
-	`}
->
+{#if showChatMode}
+	<!-- Chat Mode -->
+	<ChatMode 
+		sessionId={data.sessionId} 
+		onClose={() => {
+			showChatMode = false;
+			presentationStore.resume();
+		}}
+	/>
+{:else}
+	<!-- Presentation Mode -->
+	<div
+		class="w-screen h-screen overflow-hidden flex flex-col"
+		style={`
+			${currentTheme.background.type === 'color' ? `background: ${currentTheme.background.value};` : ''}
+			${currentTheme.background.type === 'gradient' ? `background: ${currentTheme.background.value};` : ''}
+			${currentTheme.background.type === 'image' ? `background: url(${currentTheme.background.value}) center/cover;` : ''}
+			color: ${currentTheme.colors.text};
+		`}
+	>
 	<!-- Background overlay if specified -->
 	{#if currentTheme.background.overlay}
 		<div class="absolute inset-0 pointer-events-none" style={`background: ${currentTheme.background.overlay};`}></div>
@@ -545,6 +567,7 @@
 			<div class="text-sm space-y-1">
 				<p><kbd class="bg-white text-black px-2 py-1 rounded text-xs">Space</kbd> Hold to Speak</p>
 				<p><kbd class="bg-white text-black px-2 py-1 rounded text-xs">/</kbd> or <kbd class="bg-white text-black px-2 py-1 rounded text-xs">⌘K</kbd> Quick Chat</p>
+				<p><kbd class="bg-white text-black px-2 py-1 rounded text-xs">C</kbd> Chat Mode: {showChatMode ? '✅' : '❌'}</p>
 				<p><kbd class="bg-white text-black px-2 py-1 rounded text-xs">N</kbd> New Session</p>
 				<p><kbd class="bg-white text-black px-2 py-1 rounded text-xs">←→</kbd> Navigate Slides</p>
 				<p><kbd class="bg-white text-black px-2 py-1 rounded text-xs">A</kbd> Auto-advance: {presentationStore.autoAdvance ? '✅' : '❌'}</p>
@@ -621,4 +644,5 @@
 
 	<!-- Debug Panel -->
 	<DebugPanel isVisible={showDebugPanel} />
-</div>
+	</div>
+{/if}
