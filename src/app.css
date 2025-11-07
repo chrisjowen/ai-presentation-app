@@ -11,16 +11,20 @@ body {
   @apply bg-slate-950 text-slate-100;
 }
 
-/* Transition Animations */
+/* Smooth Transition Animations - Optimized for 60fps */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { 
+    opacity: 0;
+  }
+  to { 
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -31,7 +35,7 @@ body {
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
@@ -42,7 +46,7 @@ body {
 @keyframes slideLeft {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(20px);
   }
   to {
     opacity: 1;
@@ -53,7 +57,7 @@ body {
 @keyframes slideRight {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-20px);
   }
   to {
     opacity: 1;
@@ -70,9 +74,46 @@ body {
   }
 }
 
-.animate-fade { animation: fadeIn 0.3s ease-in; }
-.animate-slide-up { animation: slideUp 0.4s ease-out; }
-.animate-slide-down { animation: slideDown 0.4s ease-out; }
-.animate-slide-left { animation: slideLeft 0.4s ease-out; }
-.animate-slide-right { animation: slideRight 0.4s ease-out; }
-.animate-bounce-subtle { animation: bounceSubtle 2s ease-in-out infinite; }
+/* Smooth animation classes with cubic-bezier easing */
+.animate-fade { 
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-up { 
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-down { 
+  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-left { 
+  animation: slideLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-right { 
+  animation: slideRight 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-bounce-subtle { 
+  animation: bounceSubtle 2s ease-in-out infinite;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade,
+  .animate-slide-up,
+  .animate-slide-down,
+  .animate-slide-left,
+  .animate-slide-right,
+  .animate-bounce-subtle {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Smooth transitions for interactive elements */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
