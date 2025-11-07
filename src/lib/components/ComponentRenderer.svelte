@@ -13,6 +13,10 @@
 	import CounterComponent from './CounterComponent.svelte';
 	import ComparisonTableComponent from './ComparisonTableComponent.svelte';
 	import MermaidComponent from './MermaidComponent.svelte';
+	import ProgressComponent from './ProgressComponent.svelte';
+	import BadgeComponent from './BadgeComponent.svelte';
+	import AlertComponent from './AlertComponent.svelte';
+	import SeparatorComponent from './SeparatorComponent.svelte';
 
 	interface Props {
 		component: Component;
@@ -49,5 +53,13 @@
 		<ComparisonTableComponent component={component} {transition} />
 	{:else if component.type === 'mermaid'}
 		<MermaidComponent component={component} {transition} />
+	{:else if component.type === 'progress'}
+		<ProgressComponent component={component} {transition} />
+	{:else if component.type === 'badge'}
+		<BadgeComponent component={component} {transition} />
+	{:else if component.type === 'alert'}
+		<AlertComponent component={component} {transition} />
+	{:else if component.type === 'separator'}
+		<SeparatorComponent component={component} {transition} />
 	{/if}
 </div>
