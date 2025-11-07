@@ -9,6 +9,10 @@
 	function loadDemoSession() {
 		goto('/demo');
 	}
+
+	function startChat() {
+		goto('/chat');
+	}
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-8">
@@ -18,13 +22,20 @@
 		</h1>
 
 		<p class="text-2xl md:text-3xl mb-12 text-gray-300">
-			Experience AI agents like never before. No chat, just immersive presentations.
+			Experience AI agents like never before. Voice-first interactive presentations.
 		</p>
 
 		<div class="flex flex-col md:flex-row gap-6 justify-center items-center">
 			<button
+				on:click={startChat}
+				class="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 rounded-lg text-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50"
+			>
+				🎙️ Start Voice Chat
+			</button>
+
+			<button
 				on:click={loadDemoSession}
-				class="px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg text-xl font-semibold transition-all transform hover:scale-105"
+				class="px-8 py-4 bg-slate-700 hover:bg-slate-600 rounded-lg text-xl font-semibold transition-all"
 			>
 				View Demo
 			</button>
@@ -33,7 +44,7 @@
 				on:click={createNewSession}
 				class="px-8 py-4 bg-slate-700 hover:bg-slate-600 rounded-lg text-xl font-semibold transition-all"
 			>
-				Create New Session
+				Create Presentation
 			</button>
 		</div>
 

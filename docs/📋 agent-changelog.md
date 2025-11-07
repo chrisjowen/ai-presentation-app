@@ -209,6 +209,58 @@ Story 004 successfully implemented with all acceptance criteria met. The interac
 - Files modified: 8
 - Lines of code added: ~800
 - Implementation time: ~2 hours (faster than estimated 8-11 hours due to existing infrastructure)
+
+---
+
+## [2025-11-07 15:41] - Story 004: Chat Route Redesign
+
+**Action Type**: REFACTOR
+
+**Description**:
+Redesigned the chat experience based on user feedback. Created a completely separate `/chat` route with voice-first interaction, matching the home page design style, and proper presentation rendering (1-2 slides at a time).
+
+**Context - Issues with Initial Implementation**:
+1. ❌ ChatMode component had different style from home page
+2. ❌ Required navigating to session first, then toggling chat mode
+3. ❌ Keyboard shortcuts conflicted with text input
+4. ❌ Was a traditional chat interface, not presentation-focused
+5. ❌ Text-only, not voice-first
+
+**New Implementation**:
+1. ✅ Separate `/chat` route - no conflicts with session shortcuts
+2. ✅ Matches home page style (gradient background, same design language)
+3. ✅ Voice-first interaction with large microphone button
+4. ✅ Text input shows on hover as backup option
+5. ✅ Renders presentation slides (max 2 at a time) that update continuously
+6. ✅ Recent messages shown subtly, not as traditional chat
+7. ✅ TTS speaks responses automatically
+
+**Files Created/Modified**:
+- `src/routes/chat/+page.svelte` - New voice-first chat route
+- `src/routes/+page.svelte` - Added "Start Voice Chat" button
+
+**Features**:
+- **Voice Recognition**: Click-to-speak with visual feedback
+- **Text Fallback**: Input appears on hover over bottom control area
+- **Presentation Rendering**: Shows 1-2 slides at a time in grid layout
+- **Continuous Updates**: Each response updates the presentation
+- **TTS Integration**: Automatically speaks assistant responses
+- **Consistent Design**: Matches home page gradient and card styles
+
+**User Flow**:
+1. User clicks "Start Voice Chat" from home page
+2. Lands on `/chat` route with voice button
+3. Clicks microphone to speak or hovers for text input
+4. AI responds with voice + updates presentation slides
+5. Conversation continues with slides updating in real-time
+
+**Outcome**:
+Chat experience now properly separated from presentation sessions, with voice-first interaction and consistent design. No keyboard shortcut conflicts, proper presentation rendering, and intuitive UX.
+
+**Metrics**:
+- New route created: 1
+- Lines of code: ~250
+- Implementation time: ~15 minutes
 - Development notes and guides now covered by ADRs and system-overview.md
 - Historical changelog superseded by agent-changelog.md
 - Debug and troubleshooting info that was implementation-specific
