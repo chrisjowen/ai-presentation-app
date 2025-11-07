@@ -22,30 +22,32 @@
 	let { component, transition = 'instant' }: Props = $props();
 </script>
 
-{#if component.type === 'text'}
-	<TextComponent component={component} {transition} />
-{:else if component.type === 'image'}
-	<ImageComponent component={component} {transition} />
-{:else if component.type === 'grid'}
-	<GridComponent component={component} {transition} />
-{:else if component.type === 'table'}
-	<TableComponent component={component} {transition} />
-{:else if component.type === 'pie'}
-	<PieChartComponent component={component} {transition} />
-{:else if component.type === 'bar'}
-	<BarChartComponent component={component} {transition} />
-{:else if component.type === 'code'}
-	<CodeBlockComponent component={component} {transition} />
-{:else if component.type === 'timeline'}
-	<TimelineComponent component={component} {transition} />
-{:else if component.type === 'cards'}
-	<CardGridComponent component={component} {transition} />
-{:else if component.type === 'quote'}
-	<QuoteComponent component={component} {transition} />
-{:else if component.type === 'counter'}
-	<CounterComponent component={component} {transition} />
-{:else if component.type === 'comparison'}
-	<ComparisonTableComponent component={component} {transition} />
-{:else if component.type === 'mermaid'}
-	<MermaidComponent component={component} {transition} />
-{/if}
+<div data-component-type={component.type} data-component-id={component.id}>
+	{#if component.type === 'text'}
+		<TextComponent component={component} {transition} />
+	{:else if component.type === 'image'}
+		<ImageComponent component={component} {transition} />
+	{:else if component.type === 'grid'}
+		<GridComponent component={component} {transition} />
+	{:else if component.type === 'table'}
+		<TableComponent component={component} {transition} />
+	{:else if component.type === 'pie'}
+		<PieChartComponent component={component} {transition} />
+	{:else if component.type === 'bar'}
+		<BarChartComponent component={component} {transition} />
+	{:else if component.type === 'code'}
+		<CodeBlockComponent component={component} {transition} />
+	{:else if component.type === 'timeline'}
+		<TimelineComponent component={component} {transition} />
+	{:else if component.type === 'cards'}
+		<CardGridComponent component={component} {transition} />
+	{:else if component.type === 'quote'}
+		<QuoteComponent component={component} {transition} />
+	{:else if component.type === 'counter'}
+		<CounterComponent component={component} {transition} />
+	{:else if component.type === 'comparison'}
+		<ComparisonTableComponent component={component} {transition} />
+	{:else if component.type === 'mermaid'}
+		<MermaidComponent component={component} {transition} />
+	{/if}
+</div>
