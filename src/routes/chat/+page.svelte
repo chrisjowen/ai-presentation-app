@@ -16,8 +16,8 @@
 	let isProcessing = $state(false);
 	let recognition: any = null;
 	let textInput = $state('');
-	let showInput = $state(false);
-	let inputContainer: HTMLDivElement;
+	let showModal = $state(false);
+	let modalInput: HTMLInputElement;
 
 	onMount(() => {
 		// Initialize speech recognition
@@ -42,6 +42,21 @@
 				isListening = false;
 			};
 		}
+
+		// Keyboard shortcut: Cmd+E or Ctrl+E
+		const handleKeydown = (e: KeyboardEvent) => {
+			if ((e.metaKey || e.ctrlKey) && e.key === 'e') {
+				e.preventDefault();
+				showModal = true;
+				setTimeout(() => modalInput?.focus(), 100);
+			}
+			if (e.key === 'Escape' && showModal) {
+				showModal = false;
+			}
+		};
+
+		window.addEventListener('keydown', handleKeydown);
+		return () => window.removeEventListener('keydown', handleKeydown);
 	});
 
 	onDestroy(() => {
@@ -69,7 +84,7 @@
 		if (!input.trim() || isProcessing) return;
 
 		isProcessing = true;
-		showInput = false; // Hide input after submission
+		showModal = false; // Hide modal after submission
 
 		try {
 			const response = await fetch('/api/chat', {
@@ -106,7 +121,11 @@
 			const response = await fetch('/api/tts/generate', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ text })
+				body: JSON.stringify({ 
+					text,
+					voice: 'nova',
+					speed: 1.0
+				})
 			});
 
 			if (response.ok) {
@@ -127,11 +146,10 @@
 		if (textInput.trim()) {
 			handleUserInput(textInput);
 			textInput = '';
-			showInput = false;
 		}
 	}
 
-	function handleKeydown(event: KeyboardEvent) {
+	function handleModalKeydown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			handleTextSubmit();
@@ -171,61 +189,70 @@
 		</div>
 	</div>
 
-	<!-- Input Control (Hidden at Bottom, Shows on Hover) -->
-	<div 
-		class="fixed bottom-0 left-0 right-0 transition-all duration-300"
-		class:translate-y-full={!showInput && !isListening && !isProcessing}
-		class:translate-y-0={showInput || isListening || isProcessing}
-		bind:this={inputContainer}
-		onmouseenter={() => showInput = true}
-		onmouseleave={() => !textInput && (showInput = false)}
-	>
-		<div class="bg-slate-900/95 backdrop-blur-sm border-t border-slate-800">
-			<div class="max-w-7xl mx-auto px-8 py-6">
-				<!-- Voice Button -->
-				<div class="flex items-center justify-center gap-4 mb-4">
-					<button
-						onclick={toggleListening}
-						disabled={isProcessing}
-						class="w-16 h-16 rounded-full transition-all transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
-						class:bg-red-600={isListening}
-						class:hover:bg-red-700={isListening}
-						class:bg-blue-600={!isListening}
-						class:hover:bg-blue-700={!isListening}
-						class:animate-pulse={isListening}
-					>
-						<svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-						</svg>
-					</button>
+	<!-- Voice Button (Fixed Bottom Center) -->
+	<div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+		<button
+			onclick={toggleListening}
+			disabled={isProcessing}
+			class="w-20 h-20 rounded-full shadow-2xl transition-all transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+			class:bg-red-600={isListening}
+			class:hover:bg-red-700={isListening}
+			class:bg-blue-600={!isListening}
+			class:hover:bg-blue-700={!isListening}
+			class:animate-pulse={isListening}
+		>
+			<svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+			</svg>
+		</button>
+		
+		{#if isProcessing}
+			<div class="absolute -top-12 left-1/2 -translate-x-1/2 text-slate-400 animate-pulse text-sm whitespace-nowrap">
+				Processing...
+			</div>
+		{:else if isListening}
+			<div class="absolute -top-12 left-1/2 -translate-x-1/2 text-red-400 animate-pulse text-sm whitespace-nowrap">
+				Listening...
+			</div>
+		{/if}
+	</div>
 
-					{#if isProcessing}
-						<div class="text-slate-400 animate-pulse text-sm">Processing...</div>
-					{:else if isListening}
-						<div class="text-red-400 animate-pulse text-sm">Listening...</div>
-					{/if}
-				</div>
-
-				<!-- Text Input -->
-				<div class="flex gap-3">
+	<!-- Spotlight Modal (Cmd+E) -->
+	{#if showModal}
+		<div 
+			class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center pt-32"
+			onclick={() => showModal = false}
+		>
+			<div 
+				class="w-full max-w-2xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden"
+				onclick={(e) => e.stopPropagation()}
+			>
+				<div class="flex items-center gap-4 p-6">
+					<svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+					</svg>
 					<input
+						bind:this={modalInput}
 						type="text"
 						bind:value={textInput}
-						onkeydown={handleKeydown}
-						placeholder="Or type your message..."
-						class="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+						onkeydown={handleModalKeydown}
+						placeholder="Ask anything..."
+						class="flex-1 bg-transparent text-white text-lg placeholder-slate-500 focus:outline-none"
 					/>
 					<button
 						onclick={handleTextSubmit}
 						disabled={!textInput.trim() || isProcessing}
-						class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+						class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						Send
 					</button>
 				</div>
+				<div class="px-6 pb-4 text-xs text-slate-500">
+					Press <kbd class="px-2 py-1 bg-slate-800 rounded">Enter</kbd> to send • <kbd class="px-2 py-1 bg-slate-800 rounded">Esc</kbd> to close
+				</div>
 			</div>
 		</div>
-	</div>
+	{/if}
 </div>
 
 <style>
