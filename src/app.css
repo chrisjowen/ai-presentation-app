@@ -26,7 +26,7 @@ body {
   background-clip: text;
 }
 
-.text-gradient-purple {
+.text-gradient-blue {
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

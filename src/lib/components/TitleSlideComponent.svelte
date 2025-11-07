@@ -44,7 +44,7 @@
 				{component.title}
 			</h1>
 			<div class="flex justify-center">
-				<div class="h-2 w-32 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full"></div>
+				<div class="h-2 w-32 bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full"></div>
 			</div>
 		</div>
 

@@ -33,8 +33,8 @@
 </script>
 
 <div class={`w-full max-w-md mx-auto text-center ${getTransitionClass(transition)} ${component.className || ''}`}>
-	<div class="bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/30 shadow-2xl">
-		<div class="text-6xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+	<div class="bg-slate-900/40 backdrop-blur-sm rounded-lg p-6 border border-slate-800 shadow-xl">
+		<div class="text-5xl font-bold text-blue-400 mb-2">
 			{displayValue.toLocaleString()}{component.suffix || ''}
 		</div>
 		<div class="text-xl text-gray-300">{component.label}</div>

@@ -13,7 +13,7 @@
 
 <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-8">
 	<div class="max-w-4xl mx-auto text-center">
-		<h1 class="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+		<h1 class="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
 			AI Explainer
 		</h1>
 
@@ -24,7 +24,7 @@
 		<div class="flex flex-col md:flex-row gap-6 justify-center items-center">
 			<button
 				on:click={loadDemoSession}
-				class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg text-xl font-semibold transition-all transform hover:scale-105"
+				class="px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg text-xl font-semibold transition-all transform hover:scale-105"
 			>
 				View Demo
 			</button>

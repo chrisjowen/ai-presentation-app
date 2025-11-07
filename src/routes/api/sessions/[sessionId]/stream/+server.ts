@@ -1,6 +1,6 @@
 import { setSession } from '$lib/server/sessions';
 import type { RequestHandler } from './$types';
-import { SimpleAgent } from '$lib/agent/simple-agent';
+import { SimpleDynamicAgent } from '$lib/agent/simple-agent-new';
 import { env } from '$env/dynamic/private';
 
 // POST /api/sessions/:sessionId/stream - Stream agent responses using Server-Sent Events
@@ -27,10 +27,10 @@ export const POST: RequestHandler = async ({ params, request }) => {
 			);
 		}
 
-		// Create simple agent with model selection
-		const agent = new SimpleAgent(anthropicKey || '', openaiKey, modelId);
+		// Create dynamic agent with model selection
+		const agent = new SimpleDynamicAgent(anthropicKey || '', openaiKey, modelId);
 
-		console.log(`[SimpleAgent] Streaming: "${message}"`);
+		console.log(`[SimpleDynamicAgent] Streaming: "${message}"`);
 		const startTime = Date.now();
 
 		// Create a readable stream for SSE
@@ -56,13 +56,13 @@ export const POST: RequestHandler = async ({ params, request }) => {
 					}
 
 					const duration = Date.now() - startTime;
-					console.log(`[SimpleAgent] Streaming completed in ${duration}ms`);
+					console.log(`[SimpleDynamicAgent] Streaming completed in ${duration}ms`);
 
 					// Send completion signal
 					controller.enqueue(encoder.encode('data: [DONE]\n\n'));
 					controller.close();
 				} catch (error) {
-					console.error('[SimpleAgent] Streaming error:', error);
+					console.error('[SimpleDynamicAgent] Streaming error:', error);
 					const errorData = `data: ${JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' })}\n\n`;
 					controller.enqueue(encoder.encode(errorData));
 					controller.close();
@@ -79,7 +79,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 			}
 		});
 	} catch (error) {
-		console.error('[SimpleAgent] Error:', error);
+		console.error('[SimpleDynamicAgent] Error:', error);
 		return new Response(
 			JSON.stringify({
 				error: 'Failed to process message',

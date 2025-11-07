@@ -36,7 +36,8 @@ export const THEMES: Record<string, Theme> = {
 		name: 'Default',
 		background: {
 			type: 'gradient',
-			value: 'linear-gradient(to bottom right, #0a0a0a, #1a1a1a)'
+			value: 'linear-gradient(to bottom, #000000, #0a0a1a, #1a0a2e)',
+			overlay: 'rgba(0, 0, 0, 0.3)'
 		},
 		colors: {
 			primary: '#3b82f6',
@@ -57,18 +58,18 @@ export const THEMES: Record<string, Theme> = {
 		},
 		header: {
 			height: '80px',
-			className: 'bg-gradient-to-r from-purple-900/30 to-blue-900/30 backdrop-blur-sm'
+			className: 'bg-gradient-to-r from-slate-900/30 to-blue-900/30 backdrop-blur-sm'
 		},
 		footer: {
 			height: '60px',
 			className: 'bg-black/30 backdrop-blur-sm'
 		},
 		colors: {
-			primary: '#a78bfa',
-			secondary: '#818cf8',
-			accent: '#c084fc',
+			primary: '#3b82f6',
+			secondary: '#60a5fa',
+			accent: '#06b6d4',
 			text: '#ffffff',
-			textSecondary: '#d8b4fe'
+			textSecondary: '#94a3b8'
 		}
 	},
 
@@ -77,23 +78,23 @@ export const THEMES: Record<string, Theme> = {
 		name: 'AI',
 		background: {
 			type: 'gradient',
-			value: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+			value: 'linear-gradient(135deg, #1e3a8a 0%, #0c4a6e 50%, #0891b2 100%)',
 			overlay: 'rgba(0, 0, 0, 0.4)'
 		},
 		header: {
 			height: '80px',
-			className: 'bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-md border-b border-purple-500/30'
+			className: 'bg-gradient-to-r from-slate-900/40 to-blue-900/40 backdrop-blur-md border-b border-blue-500/30'
 		},
 		footer: {
 			height: '60px',
-			className: 'bg-black/40 backdrop-blur-md border-t border-purple-500/20'
+			className: 'bg-black/40 backdrop-blur-md border-t border-blue-500/20'
 		},
 		colors: {
-			primary: '#818cf8',
-			secondary: '#c084fc',
+			primary: '#3b82f6',
+			secondary: '#60a5fa',
 			accent: '#06b6d4',
 			text: '#ffffff',
-			textSecondary: '#e9d5ff'
+			textSecondary: '#cbd5e1'
 		}
 	}
 };

@@ -46,7 +46,7 @@
 
 <div class={`flex flex-col ${getTransitionClass(transition)} ${component.className || ''}`}>
 	{#if component.title}
-		<h3 class="text-3xl md:text-4xl lg:text-5xl font-semibold mb-12 text-center">{component.title}</h3>
+		<h3 class="text-sm md:text-base font-semibold mb-3 text-center text-slate-300">{component.title}</h3>
 	{/if}
 
 	{#if isVertical}

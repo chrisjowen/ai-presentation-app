@@ -34,19 +34,19 @@
 <div class={`w-full h-full flex flex-col ${getTransitionClass(transition)} ${component.className || ''}`}>
 	<!-- Header with underline -->
 	{#if component.header}
-		<div class="px-12 py-8 border-b border-slate-800">
-			<h2 class="text-4xl md:text-5xl font-bold mb-2">{component.header.title}</h2>
-			<div class="h-1 w-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-2"></div>
+		<div class="px-6 py-3 border-b border-slate-800">
+			<h2 class="text-base md:text-lg font-bold mb-1">{component.header.title}</h2>
+			<div class="h-0.5 w-16 bg-blue-500 rounded-full mb-1"></div>
 			{#if component.header.subtitle}
-				<p class="text-xl md:text-2xl text-slate-400">{component.header.subtitle}</p>
+				<p class="text-sm text-slate-400">{component.header.subtitle}</p>
 			{/if}
 		</div>
 	{/if}
 
 	<!-- Grid content -->
-	<div class={`flex-1 grid ${gridClasses[component.layout]} gap-8 md:gap-12 p-12`}>
+	<div class={`flex-1 grid ${gridClasses[component.layout]} gap-4 md:gap-6 p-6`}>
 		{#each component.content as column, colIndex}
-			<div class="flex flex-col gap-6">
+			<div class="flex flex-col gap-3">
 				{#each column as item}
 					<ComponentRenderer component={item} transition="fade" />
 				{/each}

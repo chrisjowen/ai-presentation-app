@@ -78,7 +78,7 @@ export class PresentationAgent {
 			modelName: 'claude-3-5-sonnet-20241022',
 			apiKey: apiKey || process.env.ANTHROPIC_API_KEY,
 			temperature: 0.7,
-			maxTokens: 4096
+			maxTokens: 10096
 		});
 
 		// Create ReAct agent with recursion limit

@@ -13,7 +13,7 @@
 <div class="w-full">
 	{#if variant === 'section'}
 		<!-- Section divider header -->
-		<div class="flex flex-col items-center justify-center py-12 border-b-4 border-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+		<div class="flex flex-col items-center justify-center py-12 border-b-4 border-blue-500">
 			{#if showLogo && logoUrl}
 				<img src={logoUrl} alt="Logo" class="h-12 mb-6 opacity-50" />
 			{/if}
@@ -43,12 +43,12 @@
 			</div>
 			{#if title}
 				<div class="space-y-2">
-					<h2 class="text-3xl md:text-4xl font-bold">{title}</h2>
-					<div class="h-1 w-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+					<h2 class="text-2xl md:text-3xl font-bold">{title}</h2>
+					<div class="h-1 w-20 bg-blue-500 rounded-full"></div>
 				</div>
 			{/if}
 			{#if subtitle}
-				<p class="text-lg md:text-xl text-slate-400 mt-2">{subtitle}</p>
+				<p class="text-base md:text-lg text-slate-400 mt-2">{subtitle}</p>
 			{/if}
 		</div>
 	{/if}

@@ -24,7 +24,7 @@
 			case 'info':
 				return 'bg-blue-500';
 			default:
-				return 'bg-purple-500';
+				return 'bg-blue-500';
 		}
 	});
 </script>

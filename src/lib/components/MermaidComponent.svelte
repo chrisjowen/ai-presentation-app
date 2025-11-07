@@ -48,6 +48,11 @@
 					secondaryTextColor: '#cbd5e1',
 					lineColor: '#64748b',
 					textColor: '#fff'
+				},
+				flowchart: {
+					rankSpacing: 80,
+					nodeSpacing: 50,
+					curve: 'basis'
 				}
 			});
 
@@ -68,10 +73,10 @@
 
 <div class={`w-full max-w-7xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
 	{#if component.title}
-		<h3 class="text-3xl md:text-4xl font-semibold mb-8 text-center">{component.title}</h3>
+		<h3 class="text-sm md:text-base font-semibold mb-2 text-center text-slate-300">{component.title}</h3>
 	{/if}
 
-	<div class="bg-slate-900/30 backdrop-blur-sm rounded-2xl p-8 md:p-12">
+	<div class="bg-slate-900/30 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-slate-800">
 		{#if isLoading}
 			<div class="flex items-center justify-center h-80">
 				<div class="text-slate-400 text-lg animate-pulse">Rendering diagram...</div>

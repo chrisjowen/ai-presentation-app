@@ -28,7 +28,7 @@ export interface BaseComponent {
 export interface TextComponent extends BaseComponent {
 	type: 'text';
 	content: string;
-	variant?: 'heading' | 'subheading' | 'body' | 'caption';
+	variant?: 'heading' | 'subheading' | 'title' | 'body' | 'caption';
 	align?: 'left' | 'center' | 'right';
 	color?: string;
 	gradient?: string; // CSS gradient string, e.g., "linear-gradient(45deg, #667eea 0%, #764ba2 100%)"

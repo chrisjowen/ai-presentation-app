@@ -29,13 +29,13 @@
 	{/if}
 
 	<!-- Decorative top line -->
-	<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+	<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
 
 	<!-- Content -->
 	<div class="relative z-10 text-center max-w-4xl px-8 space-y-8">
 		<!-- Section number or icon -->
 		{#if component.number}
-			<div class="text-8xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-50">
+			<div class="text-8xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-400 opacity-50">
 				{component.number.toString().padStart(2, '0')}
 			</div>
 		{:else if component.icon}
@@ -58,10 +58,10 @@
 
 		<!-- Decorative underline -->
 		<div class="flex justify-center pt-4">
-			<div class="h-1 w-48 bg-gradient-to-r from-transparent via-purple-500 to-transparent rounded-full"></div>
+			<div class="h-1 w-48 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"></div>
 		</div>
 	</div>
 
 	<!-- Decorative bottom line -->
-	<div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+	<div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
 </div>

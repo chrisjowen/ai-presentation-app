@@ -57,7 +57,7 @@
 			<ul class="space-y-4 text-xl md:text-2xl text-slate-200">
 				{#each component.content.points as point}
 					<li class="flex items-start gap-3">
-						<span class="text-purple-400 text-2xl">•</span>
+						<span class="text-blue-400 text-2xl">•</span>
 						<span class="leading-relaxed">{point}</span>
 					</li>
 				{/each}

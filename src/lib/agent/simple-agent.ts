@@ -157,22 +157,22 @@ EXAMPLE - "compare cats and dogs" (GOOD - Bullets sync with voice - FAST timing)
 [
   {"type":"clear","transition":"fade"},
   {"type":"add","component":{"id":"title","type":"text","content":"🐱 Understanding Cats","variant":"heading"},"transition":"fade"},
-  {"type":"add","component":{"id":"img","type":"image","src":"https://example.com/cat.jpg","alt":"Cat"},"transition":"slide-up","timestamp":300},
-  {"type":"add","component":{"id":"bullet1","type":"text","content":"• Independent & low maintenance","variant":"body"},"transition":"slide-up","timestamp":800},
-  {"type":"speak","text":"First, cats are incredibly independent and require very low maintenance compared to other pets.","timestamp":850},
-  {"type":"add","component":{"id":"bullet2","type":"text","content":"• Quiet, perfect for apartments","variant":"body"},"transition":"slide-up","timestamp":4000},
-  {"type":"speak","text":"They're also very quiet animals, making them perfect for apartment living where noise can be an issue.","timestamp":4050},
-  {"type":"add","component":{"id":"bullet3","type":"text","content":"• Sleep 12-16 hours daily","variant":"body"},"transition":"slide-up","timestamp":7000},
-  {"type":"speak","text":"And cats sleep an impressive twelve to sixteen hours per day, so they won't demand constant attention.","timestamp":7050},
-  {"type":"speak","text":"Overall, cats make ideal companions for busy people who want a loving pet without the high maintenance requirements of other animals. Their calm, independent nature perfectly suits modern apartment lifestyles.","timestamp":10000}
+  {"type":"add","component":{"id":"img","type":"image","src":"https://example.com/cat.jpg","alt":"Cat"},"transition":"slide-up","timestamp":200},
+  {"type":"add","component":{"id":"bullet1","type":"text","content":"• Independent & low maintenance","variant":"body"},"transition":"slide-up","timestamp":400},
+  {"type":"speak","text":"First, cats are incredibly independent and require very low maintenance compared to other pets.","timestamp":450},
+  {"type":"add","component":{"id":"bullet2","type":"text","content":"• Quiet, perfect for apartments","variant":"body"},"transition":"slide-up","timestamp":2000},
+  {"type":"speak","text":"They're also very quiet animals, making them perfect for apartment living where noise can be an issue.","timestamp":2050},
+  {"type":"add","component":{"id":"bullet3","type":"text","content":"• Sleep 12-16 hours daily","variant":"body"},"transition":"slide-up","timestamp":3500},
+  {"type":"speak","text":"And cats sleep an impressive twelve to sixteen hours per day, so they won't demand constant attention.","timestamp":3550},
+  {"type":"speak","text":"Overall, cats make ideal companions for busy people who want a loving pet without the high maintenance requirements of other animals.","timestamp":5000}
 ]
 
 EXAMPLE WITH TABLE - "show data":
 [
   {"type":"clear","transition":"fade"},
   {"type":"add","component":{"id":"title","type":"text","content":"📊 Programming Languages","variant":"heading"},"transition":"fade"},
-  {"type":"add","component":{"id":"data-table","type":"table","headers":["Language","Year","Creator"],"rows":[["JavaScript","1995","Brendan Eich"],["Python","1991","Guido van Rossum"],["Go","2009","Google"]]},"transition":"slide-up","timestamp":500},
-  {"type":"speak","text":"This table shows some of the most popular programming languages, when they were created, and who created them. JavaScript came first in 1995, followed by Python and Google's Go language.","timestamp":1000}
+  {"type":"add","component":{"id":"data-table","type":"table","headers":["Language","Year","Creator"],"rows":[["JavaScript","1995","Brendan Eich"],["Python","1991","Guido van Rossum"],["Go","2009","Google"]]},"transition":"slide-up","timestamp":300},
+  {"type":"speak","text":"This table shows some of the most popular programming languages, when they were created, and who created them.","timestamp":400}
 ]
 
 EXAMPLE WITH PIE CHART - "show browser market share":
@@ -332,7 +332,13 @@ You have access to the following tools to gather information:
 3. search_images(query: string) - Search for relevant images using Brave Search
 
 When you need factual information, use search_wikipedia or get_wikipedia_article BEFORE creating your presentation.
-When you need images, use search_images and ONLY use the returned URLs.
+
+🖼️ IMAGE USAGE - MANDATORY FOR VISUAL TOPICS:
+- **ALWAYS search for images** when the topic is visual (products, places, people, companies, brands)
+- **If user provides a website URL**, search for images related to that website/company
+- **Use 3-5 images minimum** for visual topics
+- **ONLY use real URLs** from search_images tool results - never make up URLs
+- **Place images prominently** - use hero, split-layout, or full-bleed image components
 
 PACING RULES:
 - ONE slide at a time
@@ -563,16 +569,27 @@ export class SimpleAgent {
 		this.modelWithTools = this.model.bindTools?.(TOOLS) || this.model;
 	}
 
-	// Streaming version - yields slides ONE AT A TIME, continues until interrupted
+	// Streaming version - generates presentation dynamically based on content
 	async *streamMessage(userMessage: string, sessionId: string): AsyncGenerator<Presentation, void, unknown> {
 		try {
 			this.debugLogs = [];
-			this.debugLogCounter = 0; // Reset counter for each new request
+			this.debugLogCounter = 0;
 			console.log(`[SimpleAgent] Streaming message: "${userMessage}"`);
 			this.addDebugLog('user_message', userMessage);
 
 			let allEvents: TimelineEvent[] = [];
-			const theme = 'default'; // Always use default dark theme
+			const theme = 'default';
+			
+			// Start background searches immediately
+			console.log('[SimpleAgent] 🔍 Starting background searches...');
+			const imageSearchPromise = this.executeTool('search_images', {
+				query: userMessage,
+				count: 5
+			});
+			
+			const wikiSearchPromise = this.executeTool('search_wikipedia', {
+				query: userMessage
+			});
 
 			// ============================================
 			// SLIDE 1: PROFESSIONAL TITLE SLIDE (wait for interesting content)
@@ -637,7 +654,7 @@ Respond with JSON array only.`;
 - Fast voiceover (1 sentence)
 - Examples: 3 cards with icons, large quote, or big number counter
 
-Respond with a JSON array of ALL events so far (slide 1 + slide 2).`;
+Respond with a JSON array of ONLY the NEW events for slide 2 (don't repeat slide 1).`;
 
 			const slide2Response = await this.model.invoke([
 				{ role: 'system', content: SIMPLE_PROMPT },
@@ -651,9 +668,10 @@ Respond with a JSON array of ALL events so far (slide 1 + slide 2).`;
 			const slide2Match = slide2Content.match(/\[[\s\S]*\]/);  // Greedy
 			if (slide2Match) {
 				try {
-					const slide2Events: TimelineEvent[] = JSON.parse(slide2Match[0]);
+					const slide2NewEvents: TimelineEvent[] = JSON.parse(slide2Match[0]);
 					// Validate events (check for invalid Mermaid, etc)
-					allEvents = await validateEvents(slide2Events);
+					const validatedNewEvents = await validateEvents(slide2NewEvents);
+					allEvents = [...allEvents, ...validatedNewEvents];
 					console.log(`[SimpleAgent] Parsed slide 2:`, allEvents.length, 'events');
 					yield {
 						sessionId,
@@ -742,7 +760,7 @@ Now add ONE MORE slide (slide ${slideNumber}) to continue the story.
 
 Make this slide different from previous ones - use varied layouts (text, images, grids, quotes, etc).
 
-Respond with a JSON array of ALL events so far (slides 1-${slideNumber}).`;
+Respond with a JSON array of ONLY the NEW events for slide ${slideNumber} (don't repeat previous slides).`;
 
 				const slideResponse = await this.model.invoke([
 					{ role: 'system', content: SIMPLE_PROMPT },
@@ -756,12 +774,13 @@ Respond with a JSON array of ALL events so far (slides 1-${slideNumber}).`;
 				const slideMatch = slideContent.match(/\[[\s\S]*\]/);  // Greedy
 				if (slideMatch) {
 					try {
-						const slideEvents: TimelineEvent[] = JSON.parse(slideMatch[0]);
+						const slideNewEvents: TimelineEvent[] = JSON.parse(slideMatch[0]);
 
 						// Only yield if we got more events than before (new content)
-						if (slideEvents.length > allEvents.length) {
+						const validatedNewEvents = await validateEvents(slideNewEvents);
+						if (validatedNewEvents.length > 0) {
 							// Validate events (check for invalid Mermaid, etc)
-							allEvents = await validateEvents(slideEvents);
+							allEvents = [...allEvents, ...validatedNewEvents];
 							console.log(`[SimpleAgent] Parsed slide ${slideNumber}: ${allEvents.length} events`);
 							yield {
 								sessionId,

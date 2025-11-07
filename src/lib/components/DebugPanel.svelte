@@ -42,8 +42,8 @@
 									<span class="text-blue-400">💬</span>
 									<span class="font-bold text-blue-400">User Message</span>
 								{:else if log.type === 'tool_call'}
-									<span class="text-purple-400">🔧</span>
-									<span class="font-bold text-purple-400">Tool Call</span>
+									<span class="text-blue-400">🔧</span>
+									<span class="font-bold text-blue-400">Tool Call</span>
 								{:else if log.type === 'tool_result'}
 									<span class="text-green-400">✅</span>
 									<span class="font-bold text-green-400">Tool Result</span>
@@ -67,7 +67,7 @@
 								<div class="italic">"{log.data}"</div>
 							{:else if log.type === 'tool_call'}
 								<div class="space-y-1">
-									<div><span class="text-purple-300">Tool:</span> {log.data.name}</div>
+									<div><span class="text-blue-300">Tool:</span> {log.data.name}</div>
 									<details class="mt-1">
 										<summary class="cursor-pointer text-gray-400 hover:text-gray-300">Arguments</summary>
 										<pre class="mt-1 p-2 bg-slate-900 rounded text-xs overflow-auto">{JSON.stringify(log.data.args, null, 2)}</pre>

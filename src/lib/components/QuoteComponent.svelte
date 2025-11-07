@@ -31,6 +31,6 @@
 			<div class="mt-8 text-2xl md:text-3xl text-slate-400 font-normal">— {component.author}</div>
 		{/if}
 		<!-- Subtle accent line -->
-		<div class="absolute -left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-blue-500 rounded-full"></div>
+		<div class="absolute -left-6 top-0 bottom-0 w-1 bg-blue-500 rounded-full"></div>
 	</div>
 </div>

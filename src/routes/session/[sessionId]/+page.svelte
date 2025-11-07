@@ -30,7 +30,7 @@
 	let recognition: any = null;
 	let showQuickChat = $state(false);
 	let chatInput = $state('');
-	let chatInputElement: HTMLTextAreaElement;
+	let chatInputElement = $state<HTMLTextAreaElement | undefined>(undefined);
 	let showShortcuts = $state(false); // Hidden by default
 	let showDebugPanel = $state(false);
 	let contentContainer: HTMLDivElement;
@@ -474,7 +474,7 @@
 				<LoadingAnimation message="Processing your request..." />
 			{:else if presentationStore.state.components.length > 0}
 				<div class="flex flex-col items-center justify-center gap-8 w-full transition-all duration-300 ease-out">
-					{#each presentationStore.state.components as component (component.id)}
+					{#each presentationStore.state.components as component, index (`${component.id}-${index}`)}
 						<ComponentRenderer {component} transition={component.transition || 'fade'} />
 					{/each}
 				</div>
@@ -520,7 +520,6 @@
 		<div class="fixed top-4 right-4 z-50">
 			<div class="relative">
 				<div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-				<div class="absolute inset-0 w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" style="animation-duration: 1.5s; animation-direction: reverse;"></div>
 			</div>
 		</div>
 	{:else if presentationStore.isWaitingForContent && streamComplete}
@@ -534,30 +533,7 @@
 		</div>
 	{/if}
 
-	<!-- Floating Robot with Speech Bubble -->
-	{#if presentationStore.currentSpeakText}
-		<div class="fixed bottom-20 right-8 z-50 flex items-end gap-3">
-			<!-- Speech Bubble -->
-			<div class="relative max-w-md bg-white text-gray-900 px-6 py-4 rounded-2xl shadow-2xl">
-				<!-- Tail -->
-				<div class="absolute bottom-4 -right-2 w-4 h-4 bg-white transform rotate-45"></div>
 
-				<!-- Text (larger, no highlighting) -->
-				<p class="text-lg leading-relaxed relative z-10 font-medium">
-					{presentationStore.currentSpeakText}
-				</p>
-			</div>
-
-			<!-- Robot Avatar -->
-			<div class="relative flex-shrink-0">
-				<div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-lg flex items-center justify-center animate-bounce-subtle">
-					<span class="text-3xl">🤖</span>
-				</div>
-				<!-- Talking indicator -->
-				<div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
-			</div>
-		</div>
-	{/if}
 
 	<!-- Instructions & Voice Settings -->
 	{#if showShortcuts}

@@ -111,7 +111,7 @@ export const EXAMPLE_PRESENTATION: Presentation = {
 		},
 		{
 			type: 'add',
-			timestamp: 2000,
+			timestamp: 500,
 			component: {
 				id: 'subtitle',
 				type: 'text',
@@ -123,17 +123,17 @@ export const EXAMPLE_PRESENTATION: Presentation = {
 		},
 		{
 			type: 'speak',
-			timestamp: 500,
+			timestamp: 200,
 			text: 'Instead of scrolling through endless chat messages, you get an immersive presentation experience.'
 		},
 		{
 			type: 'clear',
-			timestamp: 3000,
+			timestamp: 400,
 			transition: 'fade'
 		},
 		{
 			type: 'add',
-			timestamp: 500,
+			timestamp: 200,
 			component: {
 				id: 'grid-demo',
 				type: 'grid',
@@ -162,17 +162,17 @@ export const EXAMPLE_PRESENTATION: Presentation = {
 		},
 		{
 			type: 'speak',
-			timestamp: 500,
+			timestamp: 200,
 			text: 'Text, images, and grids update dynamically, all synchronized with voice narration.'
 		},
 		{
 			type: 'clear',
-			timestamp: 3000,
+			timestamp: 400,
 			transition: 'slide-left'
 		},
 		{
 			type: 'add',
-			timestamp: 500,
+			timestamp: 200,
 			component: {
 				id: 'final-message',
 				type: 'text',
@@ -184,7 +184,7 @@ export const EXAMPLE_PRESENTATION: Presentation = {
 		},
 		{
 			type: 'speak',
-			timestamp: 1000,
+			timestamp: 300,
 			text: 'You can press the spacebar at any time to pause and ask questions. Try it now!'
 		}
 	]

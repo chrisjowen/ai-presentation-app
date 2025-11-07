@@ -24,7 +24,7 @@
 	<div
 		class={`
 			${getTransitionClass(transition)}
-			text-2xl md:text-3xl prose prose-invert prose-xl max-w-none leading-relaxed-plus
+			text-sm md:text-base prose prose-invert prose-sm max-w-none leading-relaxed
 			${component.align === 'left' ? 'text-left' : ''}
 			${component.align === 'right' ? 'text-right' : ''}
 			${component.align === 'center' || !component.align ? 'text-center' : ''}
@@ -38,9 +38,10 @@
 	<div
 		class={`
 			${getTransitionClass(transition)}
-			${component.variant === 'heading' ? 'text-6xl md:text-8xl lg:text-9xl font-bold mb-8 tracking-tight leading-none' : ''}
-			${component.variant === 'subheading' ? 'text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 tracking-tight' : ''}
-			${component.variant === 'caption' ? 'text-xl md:text-2xl text-slate-400 font-light' : ''}
+			${component.variant === 'heading' ? 'text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight' : ''}
+			${component.variant === 'subheading' ? 'text-2xl md:text-3xl font-semibold mb-4 tracking-tight' : ''}
+			${component.variant === 'title' ? 'text-base md:text-lg font-bold mb-3 tracking-tight' : ''}
+			${component.variant === 'caption' ? 'text-xs md:text-sm text-slate-400 font-normal' : ''}
 			${component.align === 'left' ? 'text-left' : ''}
 			${component.align === 'right' ? 'text-right' : ''}
 			${component.align === 'center' || !component.align ? 'text-center' : ''}
