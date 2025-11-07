@@ -13,13 +13,17 @@
 	const minValue = $derived(Math.min(...component.data.map(item => item.value)));
 	const defaultColors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
 
-	// Calculate a reasonable scale - use a nice round number above the max
+	// Calculate a tighter scale for better visual variation
 	const scale = $derived(() => {
 		if (maxValue === 0) return 100;
 
+		// Use max value + 20% padding for better visual range
+		// This ensures bars aren't all near 100% height
+		const paddedMax = maxValue * 1.2;
+		
 		// Find the order of magnitude
-		const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)));
-		const normalized = maxValue / magnitude;
+		const magnitude = Math.pow(10, Math.floor(Math.log10(paddedMax)));
+		const normalized = paddedMax / magnitude;
 
 		// Round up to nearest nice number (1, 2, 5, or 10)
 		let niceMax;

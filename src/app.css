@@ -118,25 +118,25 @@ body {
   }
 }
 
-/* Smooth animation classes with cubic-bezier easing */
+/* Smooth animation classes with cubic-bezier easing - slower and more fluid */
 .animate-fade { 
-  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .animate-slide-up { 
-  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideUp 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .animate-slide-down { 
-  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideDown 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .animate-slide-left { 
-  animation: slideLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideLeft 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .animate-slide-right { 
-  animation: slideRight 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideRight 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .animate-bounce-subtle { 

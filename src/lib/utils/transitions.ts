@@ -37,7 +37,7 @@ export interface FadeSlideParams {
  */
 export function fadeSlide(
 	node: Element,
-	{ delay = 0, duration = 400, easing = cubicOut, y = 10, x = 0 }: FadeSlideParams = {}
+	{ delay = 0, duration = 600, easing = cubicOut, y = 10, x = 0 }: FadeSlideParams = {}
 ): TransitionConfig {
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	
@@ -72,7 +72,7 @@ export function fadeSlide(
  */
 export function scaleFade(
 	node: Element,
-	{ delay = 0, duration = 400, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
+	{ delay = 0, duration = 600, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
 ): TransitionConfig {
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	
@@ -96,6 +96,40 @@ export function scaleFade(
 			return `
 				opacity: ${opacity};
 				transform: scale(${scale});
+			`;
+		}
+	};
+}
+
+/**
+ * Blur fade for ultra-smooth transitions
+ */
+export function blurFade(
+	node: Element,
+	{ delay = 0, duration = 600, easing = cubicOut }: Omit<FadeSlideParams, 'y' | 'x'> = {}
+): TransitionConfig {
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	
+	if (prefersReducedMotion) {
+		return {
+			delay,
+			duration: 0,
+			easing,
+			css: () => ''
+		};
+	}
+
+	return {
+		delay,
+		duration,
+		easing,
+		css: (t) => {
+			const opacity = t;
+			const blur = (1 - t) * 4; // 4px blur at start, 0 at end
+			
+			return `
+				opacity: ${opacity};
+				filter: blur(${blur}px);
 			`;
 		}
 	};

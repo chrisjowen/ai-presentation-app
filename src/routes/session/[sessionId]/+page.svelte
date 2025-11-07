@@ -35,20 +35,9 @@
 	let autoScrollInterval: NodeJS.Timeout | null = null;
 	let streamComplete = $state(true); // Track if the streaming response is complete
 
-	// Determine if we should center content vertically (simple slides only)
-	const shouldCenterContent = $derived(() => {
-		const components = presentationStore.state.components;
-		if (components.length === 0) return true;
-
-		// Center if only text/quote components (no images, grids, or complex layouts)
-		const simpleTypes = ['text', 'quote'];
-		const hasComplexLayout = components.some(c =>
-			!simpleTypes.includes(c.type) ||
-			(c.type === 'text' && c.variant === 'body') // Body text suggests multi-element slide
-		);
-
-		return !hasComplexLayout && components.length <= 2; // Max 2 simple components to center
-	});
+	// Always start from top to avoid jarring repositioning when content is added
+	// Content will naturally center itself if it's minimal (via flex/justify-center on the component container)
+	const shouldCenterContent = $derived(() => false);
 
 	// Get slide info
 	const slideInfo = $derived(presentationStore.getSlideInfo());
@@ -451,16 +440,14 @@
 	<!-- Main presentation area -->
 	<div
 		bind:this={contentContainer}
-		class="flex-1 w-full flex justify-center p-8 relative z-10 overflow-y-auto scroll-smooth"
-		class:items-center={shouldCenterContent()}
-		class:items-start={!shouldCenterContent()}
+		class="flex-1 w-full flex justify-center p-8 relative z-10 overflow-y-auto scroll-smooth items-start transition-all duration-700 ease-out"
 	>
-		<div class="w-full max-w-7xl mx-auto" class:min-h-full={shouldCenterContent()} class:flex={shouldCenterContent()} class:items-center={shouldCenterContent()} class:justify-center={shouldCenterContent()}>
+		<div class="w-full max-w-7xl mx-auto transition-all duration-700 ease-out">
 			{#if presentationStore.isProcessing}
 				<!-- Loading animation -->
 				<LoadingAnimation message="Processing your request..." />
 			{:else if presentationStore.state.components.length > 0}
-				<div class="flex flex-col items-center gap-8" class:justify-center={shouldCenterContent()} class:w-full={!shouldCenterContent()}>
+				<div class="flex flex-col items-center gap-8 w-full transition-all duration-700 ease-out">
 					{#each presentationStore.state.components as component (component.id)}
 						<ComponentRenderer {component} transition={component.transition || 'fade'} />
 					{/each}
