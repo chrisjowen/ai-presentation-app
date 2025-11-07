@@ -206,12 +206,18 @@ EXAMPLE - Quote slide with variety:
   {"type":"speak","text":"This iconic quote from Alan Kay captures the essence of innovation.","timestamp":500}
 ]
 
-📋 PROFESSIONAL PRESENTATION STRUCTURE (FOLLOW THIS):
-1. **START**: title-slide with background image
-2. **SECTIONS**: Use section-divider between major topics (with number: 1, 2, 3)
-3. **CONTENT**: Use content-slide with headers for structured slides
-4. **TRANSITIONS**: Use wipe-right, wipe-left, zoom-in for professional feel
-5. **END**: Final slide with call-to-action or summary
+📋 PROFESSIONAL PRESENTATION STRUCTURE (MANDATORY):
+1. **START**: title-slide (NOT plain text!) with subtitle and date
+2. **SECTIONS**: Use section-divider between major topics (numbered: 1, 2, 3)
+3. **CONTENT**: Use content-slide with headers OR multiple components per slide
+4. **MULTIPLE COMPONENTS**: Combine 2-4 components per slide when it makes sense
+   - Example: heading + image + text
+   - Example: heading + 3 cards
+   - Example: chart + text explanation
+5. **CENTER ALIGNMENT**: All content defaults to center (align:"center" is default)
+6. **HEADERS/FOOTERS**: Every slide automatically has header with title and footer with page numbers
+7. **TRANSITIONS**: Use wipe-right, wipe-left, zoom-in for professional feel
+8. **END**: Final slide with call-to-action or summary
 
 EXAMPLE - PROFESSIONAL PRESENTATION OPENING:
 [
@@ -530,26 +536,24 @@ export class SimpleAgent {
 			const theme = 'default'; // Always use default dark theme
 
 			// ============================================
-			// SLIDE 1: IMMEDIATE TITLE SLIDE (no tools, instant)
+			// SLIDE 1: PROFESSIONAL TITLE SLIDE (wait for interesting content)
 			// ============================================
-			console.log('[SimpleAgent] 📤 Generating slide 1 (instant)...');
+			console.log('[SimpleAgent] 📤 Generating professional title slide...');
 
-			const slide1Prompt = `Create the FIRST slide ONLY for: "${userMessage}"
+			const slide1Prompt = `Create a PROFESSIONAL TITLE SLIDE for: "${userMessage}"
 
-🚀 SLIDE 1 RULES:
-- Simple title with emoji (heading)
-- LONGER voiceover that explains what the presentation will cover (3-4 sentences)
-- Tell the user what to expect: mention you'll show them visuals, data, examples, etc.
-- Make it engaging and set expectations
-- NO images, NO bullets, NO complex layouts on this slide
-- Just: clear → add title → speak (with longer text)
-- The voiceover should take about 8-12 seconds to read
+🎯 MANDATORY REQUIREMENTS:
+- Use title-slide component (NOT plain text!)
+- Include title, subtitle, and current date
+- Use zoom-in transition for impact
+- Voiceover should be engaging and set expectations (2-3 sentences)
+- Wait to show this until you have something interesting ready
 
 Example:
 [
   {"type":"clear","transition":"fade"},
-  {"type":"add","component":{"id":"title","type":"text","content":"🚀 Kubernetes Explained","variant":"heading","align":"center"},"transition":"fade"},
-  {"type":"speak","text":"Welcome! I'm going to walk you through Kubernetes and how it orchestrates containerized applications. We'll explore the core concepts, see some architecture diagrams, and I'll show you real examples of how it works in production. I'm gathering visual content and data right now to make this presentation as informative and engaging as possible. Let's dive in!","timestamp":500}
+  {"type":"add","component":{"id":"title","type":"title-slide","title":"AI in Healthcare","subtitle":"Transforming Patient Care Through Innovation","date":"2024","overlay":"dark"},"transition":"zoom-in"},
+  {"type":"speak","text":"Welcome to our presentation on AI in Healthcare. We'll explore how artificial intelligence is revolutionizing patient care, from diagnosis to treatment planning.","timestamp":500}
 ]
 
 Respond with JSON array only.`;

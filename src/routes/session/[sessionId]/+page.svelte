@@ -4,6 +4,8 @@
 	import ComponentRenderer from '$lib/components/ComponentRenderer.svelte';
 	import LoadingAnimation from '$lib/components/LoadingAnimation.svelte';
 	import DebugPanel from '$lib/components/DebugPanel.svelte';
+	import SlideHeader from '$lib/components/SlideHeader.svelte';
+	import SlideFooter from '$lib/components/SlideFooter.svelte';
 	import type { Presentation } from '$lib/types/timeline';
 	import { THEMES } from '$lib/types/theme';
 	import { AVAILABLE_MODELS, getModelById } from '$lib/types/models';
@@ -42,6 +44,32 @@
 	// Get slide info
 	const slideInfo = $derived(presentationStore.getSlideInfo());
 	const progress = $derived(presentationStore.getProgress());
+	
+	// Track current slide title from components
+	const currentSlideTitle = $derived(() => {
+		const components = presentationStore.state.components;
+		if (components.length === 0) return '';
+		
+		// Look for title in various component types
+		const titleComponent = components.find(c => 
+			(c.type === 'title-slide' && 'title' in c) ||
+			(c.type === 'section-divider' && 'title' in c) ||
+			(c.type === 'content-slide' && 'header' in c && c.header?.title) ||
+			(c.type === 'text' && c.variant === 'heading')
+		);
+		
+		if (!titleComponent) return '';
+		
+		if (titleComponent.type === 'title-slide' || titleComponent.type === 'section-divider') {
+			return titleComponent.title;
+		} else if (titleComponent.type === 'content-slide' && titleComponent.header) {
+			return titleComponent.header.title;
+		} else if (titleComponent.type === 'text') {
+			return titleComponent.content;
+		}
+		
+		return '';
+	});
 
 	// Auto-scroll for overflow content
 	$effect(() => {
@@ -425,29 +453,27 @@
 		<div class="absolute inset-0 pointer-events-none" style={`background: ${currentTheme.background.overlay};`}></div>
 	{/if}
 
-	<!-- Header -->
-	{#if currentTheme.header}
-		<div
-			class={`w-full flex items-center justify-center z-10 ${currentTheme.header.className || ''}`}
-			style={`height: ${currentTheme.header.height || '80px'};`}
-		>
-			{#if currentTheme.header.content}
-				<div class="text-xl font-semibold">{currentTheme.header.content}</div>
-			{/if}
+	<!-- Persistent Header -->
+	{#if presentationStore.state.components.length > 0}
+		<div class="w-full border-b border-slate-800 bg-slate-950/50 backdrop-blur-sm z-20">
+			<SlideHeader 
+				title={currentSlideTitle()} 
+				variant="minimal"
+			/>
 		</div>
 	{/if}
 
 	<!-- Main presentation area -->
 	<div
 		bind:this={contentContainer}
-		class="flex-1 w-full flex justify-center p-8 relative z-10 overflow-y-auto scroll-smooth items-start transition-all duration-700 ease-out"
+		class="flex-1 w-full flex justify-center items-center p-8 relative z-10 overflow-y-auto scroll-smooth transition-all duration-700 ease-out"
 	>
 		<div class="w-full max-w-7xl mx-auto transition-all duration-700 ease-out">
 			{#if presentationStore.isProcessing}
 				<!-- Loading animation -->
 				<LoadingAnimation message="Processing your request..." />
 			{:else if presentationStore.state.components.length > 0}
-				<div class="flex flex-col items-center gap-8 w-full transition-all duration-700 ease-out">
+				<div class="flex flex-col items-center justify-center gap-8 w-full transition-all duration-700 ease-out">
 					{#each presentationStore.state.components as component (component.id)}
 						<ComponentRenderer {component} transition={component.transition || 'fade'} />
 					{/each}
@@ -460,15 +486,16 @@
 		</div>
 	</div>
 
-	<!-- Footer -->
-	{#if currentTheme.footer}
-		<div
-			class={`w-full flex items-center justify-center z-10 ${currentTheme.footer.className || ''}`}
-			style={`height: ${currentTheme.footer.height || '60px'};`}
-		>
-			{#if currentTheme.footer.content}
-				<div class="text-sm opacity-70">{currentTheme.footer.content}</div>
-			{/if}
+	<!-- Persistent Footer -->
+	{#if presentationStore.state.components.length > 0}
+		<div class="w-full border-t border-slate-800 bg-slate-950/50 backdrop-blur-sm z-20">
+			<SlideFooter 
+				text="AI Presentation"
+				showPageNumber={true}
+				pageNumber={slideInfo.currentSlide}
+				totalPages={slideInfo.totalSlides}
+				variant="default"
+			/>
 		</div>
 	{/if}
 
