@@ -586,7 +586,7 @@
 				<div class="text-gray-400">
 					<p>Speed: {presentationStore.voiceRate.toFixed(1)}x</p>
 					{#if presentationStore.availableVoices[presentationStore.selectedVoiceIndex]}
-						<p class="truncate">Voice: {presentationStore.availableVoices[presentationStore.selectedVoiceIndex].name}</p>
+						<p class="truncate">Voice: {presentationStore.availableVoices[presentationStore.selectedVoiceIndex]}</p>
 					{/if}
 				</div>
 			</div>
