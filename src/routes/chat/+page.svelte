@@ -100,12 +100,26 @@
 		}
 	}
 
-	function speakText(text: string) {
-		if ('speechSynthesis' in window) {
-			const utterance = new SpeechSynthesisUtterance(text);
-			utterance.rate = 1.0;
-			utterance.pitch = 1.0;
-			window.speechSynthesis.speak(utterance);
+	async function speakText(text: string) {
+		try {
+			// Use OpenAI TTS API
+			const response = await fetch('/api/tts', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ text })
+			});
+
+			if (response.ok) {
+				const audioBlob = await response.blob();
+				const audioUrl = URL.createObjectURL(audioBlob);
+				const audio = new Audio(audioUrl);
+				audio.play();
+				
+				// Clean up URL after playing
+				audio.onended = () => URL.revokeObjectURL(audioUrl);
+			}
+		} catch (error) {
+			console.error('TTS error:', error);
 		}
 	}
 
