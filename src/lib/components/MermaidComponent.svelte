@@ -66,23 +66,23 @@
 	});
 </script>
 
-<div class={`w-full max-w-6xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
+<div class={`w-full max-w-7xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
 	{#if component.title}
-		<h3 class="text-2xl font-semibold mb-4 text-center">{component.title}</h3>
+		<h3 class="text-3xl md:text-4xl font-semibold mb-8 text-center">{component.title}</h3>
 	{/if}
 
-	<div class="bg-slate-900/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+	<div class="bg-slate-900/30 backdrop-blur-sm rounded-2xl p-8 md:p-12">
 		{#if isLoading}
-			<div class="flex items-center justify-center h-64">
-				<div class="text-gray-400 animate-pulse">Rendering diagram...</div>
+			<div class="flex items-center justify-center h-80">
+				<div class="text-slate-400 text-lg animate-pulse">Rendering diagram...</div>
 			</div>
 		{:else if error}
-			<div class="flex flex-col items-center justify-center p-8 text-red-400">
-				<div class="text-xl font-semibold mb-2">⚠️ Diagram Rendering Failed</div>
-				<div class="text-sm mb-4">{error}</div>
+			<div class="flex flex-col items-center justify-center p-12 text-red-400">
+				<div class="text-2xl font-semibold mb-4">⚠️ Diagram Rendering Failed</div>
+				<div class="text-base mb-6">{error}</div>
 				<details class="w-full">
-					<summary class="cursor-pointer text-sm text-gray-400 hover:text-gray-300">Show diagram source</summary>
-					<pre class="mt-2 p-4 bg-slate-800 rounded text-xs text-left overflow-auto max-h-64">{rawDiagram}</pre>
+					<summary class="cursor-pointer text-base text-slate-400 hover:text-slate-300">Show diagram source</summary>
+					<pre class="mt-4 p-6 bg-slate-800 rounded-xl text-sm text-left overflow-auto max-h-80">{rawDiagram}</pre>
 				</details>
 			</div>
 		{:else}

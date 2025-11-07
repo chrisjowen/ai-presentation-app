@@ -42,27 +42,27 @@
 
 <div class={`flex flex-col ${getTransitionClass(transition)} ${component.className || ''}`}>
 	{#if component.title}
-		<h3 class="text-2xl font-semibold mb-4 text-center">{component.title}</h3>
+		<h3 class="text-3xl md:text-4xl lg:text-5xl font-semibold mb-12 text-center">{component.title}</h3>
 	{/if}
 
 	{#if isVertical}
-		<div class="flex items-end justify-center gap-4 h-64">
+		<div class="flex items-end justify-center gap-8 md:gap-12 h-96">
 			{#each bars as bar}
-				<div class="flex flex-col items-center gap-2">
-					<span class="text-sm font-medium">{bar.value}</span>
-					<div class="w-16 rounded-t-lg transition-all hover:opacity-80" style="height: {bar.percentage}%; background-color: {bar.color}; min-height: 4px;"></div>
-					<span class="text-sm text-gray-300">{bar.label}</span>
+				<div class="flex flex-col items-center gap-4">
+					<span class="text-xl md:text-2xl font-semibold">{bar.value}</span>
+					<div class="w-20 md:w-24 rounded-t-2xl transition-all hover:opacity-80" style="height: {bar.percentage}%; background-color: {bar.color}; min-height: 8px;"></div>
+					<span class="text-lg md:text-xl text-slate-300">{bar.label}</span>
 				</div>
 			{/each}
 		</div>
 	{:else}
-		<div class="flex flex-col gap-3 w-full max-w-2xl">
+		<div class="flex flex-col gap-6 w-full max-w-4xl mx-auto">
 			{#each bars as bar}
-				<div class="flex items-center gap-3">
-					<span class="text-sm w-24 text-right">{bar.label}</span>
-					<div class="flex-1 bg-slate-700 rounded-lg h-8 relative">
-						<div class="h-full rounded-lg flex items-center justify-end px-2 transition-all hover:opacity-80" style="width: {bar.percentage}%; background-color: {bar.color};">
-							<span class="text-sm font-medium">{bar.value}</span>
+				<div class="flex items-center gap-6">
+					<span class="text-lg md:text-xl w-32 md:w-40 text-right">{bar.label}</span>
+					<div class="flex-1 bg-slate-800/30 rounded-xl h-12 md:h-14 relative">
+						<div class="h-full rounded-xl flex items-center justify-end px-4 transition-all hover:opacity-80" style="width: {bar.percentage}%; background-color: {bar.color};">
+							<span class="text-lg md:text-xl font-semibold">{bar.value}</span>
 						</div>
 					</div>
 				</div>

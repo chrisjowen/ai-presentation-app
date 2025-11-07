@@ -10,10 +10,10 @@
 	let { component, transition = 'fade' }: Props = $props();
 </script>
 
-<div class={`w-full max-w-2xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
+<div class={`w-full ${component.fullBleed ? '-mx-[10vw] max-w-none' : 'max-w-5xl mx-auto'} ${getTransitionClass(transition)} ${component.className || ''}`}>
 	<img
 		src={component.src}
 		alt={component.alt || ''}
-		class={`w-full h-auto rounded-lg shadow-2xl ${component.fit === 'cover' ? 'object-cover' : component.fit === 'fill' ? 'object-fill' : 'object-contain'}`}
+		class={`w-full h-auto ${component.fullBleed ? '' : 'rounded-2xl'} ${component.fit === 'cover' ? 'object-cover' : component.fit === 'fill' ? 'object-fill' : 'object-contain'}`}
 	/>
 </div>

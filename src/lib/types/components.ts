@@ -29,6 +29,7 @@ export interface ImageComponent extends BaseComponent {
 	src: string;
 	alt?: string;
 	fit?: 'contain' | 'cover' | 'fill';
+	fullBleed?: boolean; // Edge-to-edge image
 	className?: string;
 }
 

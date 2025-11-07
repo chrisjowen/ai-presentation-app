@@ -48,21 +48,21 @@
 	});
 </script>
 
-<div class={`w-full max-w-4xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
+<div class={`w-full max-w-6xl mx-auto ${getTransitionClass(transition)} ${component.className || ''}`}>
 	{#if component.title}
-		<div class="bg-slate-800 px-4 py-2 rounded-t-lg border-b border-slate-700">
-			<span class="text-sm font-semibold text-gray-300">{component.title}</span>
-			<span class="text-xs text-gray-500 ml-2">{component.language}</span>
+		<div class="bg-slate-800/50 px-6 py-4 rounded-t-2xl border-b border-slate-700/50">
+			<span class="text-base md:text-lg font-semibold text-slate-200">{component.title}</span>
+			<span class="text-sm text-slate-400 ml-3">{component.language}</span>
 		</div>
 	{/if}
 
 	<div class="relative">
 		{#if isLoading}
-			<div class="bg-slate-900 p-4 rounded-lg animate-pulse">
-				<div class="h-32 bg-slate-800 rounded"></div>
+			<div class="bg-slate-900 p-8 rounded-2xl animate-pulse">
+				<div class="h-40 bg-slate-800 rounded"></div>
 			</div>
 		{:else}
-			<div class="code-block-wrapper {component.title ? 'rounded-b-lg' : 'rounded-lg'} overflow-hidden">
+			<div class="code-block-wrapper {component.title ? 'rounded-b-2xl' : 'rounded-2xl'} overflow-hidden">
 				{@html highlightedCode}
 			</div>
 		{/if}
@@ -72,29 +72,35 @@
 <style>
 	:global(.code-block-wrapper pre) {
 		margin: 0;
-		padding: 1.5rem;
+		padding: 2rem 2.5rem;
 		overflow-x: auto;
 		background: #0d1117 !important;
 	}
 
 	:global(.code-block-wrapper code) {
 		font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
-		font-size: 0.9rem;
-		line-height: 1.6;
+		font-size: 1rem;
+		line-height: 1.8;
+	}
+
+	@media (min-width: 768px) {
+		:global(.code-block-wrapper code) {
+			font-size: 1.125rem;
+		}
 	}
 
 	/* Line numbers */
 	:global(.code-block-wrapper .line[data-line]) {
 		display: inline-block;
-		padding-left: 1rem;
-		padding-right: 1rem;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
 	}
 
 	:global(.code-block-wrapper .line[data-line]::before) {
 		content: attr(data-line);
 		display: inline-block;
-		width: 2rem;
-		margin-right: 1.5rem;
+		width: 2.5rem;
+		margin-right: 2rem;
 		text-align: right;
 		color: #6b7280;
 		user-select: none;
@@ -102,13 +108,13 @@
 
 	/* Highlighted lines */
 	:global(.code-block-wrapper .highlighted-line) {
-		background-color: rgba(59, 130, 246, 0.1);
-		border-left: 3px solid #3b82f6;
+		background-color: rgba(59, 130, 246, 0.15);
+		border-left: 4px solid #3b82f6;
 		display: block;
-		margin-left: -1.5rem;
-		margin-right: -1.5rem;
-		padding-left: calc(1.5rem - 3px);
-		padding-right: 1.5rem;
+		margin-left: -2rem;
+		margin-right: -2rem;
+		padding-left: calc(2rem - 4px);
+		padding-right: 2rem;
 	}
 
 	/* Smooth scrolling */
@@ -118,7 +124,7 @@
 	}
 
 	:global(.code-block-wrapper pre::-webkit-scrollbar) {
-		height: 8px;
+		height: 10px;
 	}
 
 	:global(.code-block-wrapper pre::-webkit-scrollbar-track) {
@@ -127,7 +133,7 @@
 
 	:global(.code-block-wrapper pre::-webkit-scrollbar-thumb) {
 		background: #4b5563;
-		border-radius: 4px;
+		border-radius: 5px;
 	}
 
 	:global(.code-block-wrapper pre::-webkit-scrollbar-thumb:hover) {
