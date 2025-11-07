@@ -1,28 +1,14 @@
 /**
- * Chat API endpoint for interactive presentation refinement
+ * Chat API endpoint - uses SimpleAgent for single-slide responses
  */
 
 import { json } from '@sveltejs/kit';
-import { ANTHROPIC_API_KEY } from '$env/static/private';
-import { ChatAgent } from '$lib/agent/chat/ChatAgent.js';
+import { ANTHROPIC_API_KEY, OPENAI_API_KEY } from '$env/static/private';
+import { SimpleAgent } from '$lib/agent/simple-agent.js';
 import type { RequestHandler } from './$types';
 
-// Store chat agents per session (in-memory for now)
-const chatAgents = new Map<string, ChatAgent>();
-
 /**
- * Get or create a chat agent for a session
- */
-function getChatAgent(sessionId: string): ChatAgent {
-	if (!chatAgents.has(sessionId)) {
-		const agent = new ChatAgent(ANTHROPIC_API_KEY);
-		chatAgents.set(sessionId, agent);
-	}
-	return chatAgents.get(sessionId)!;
-}
-
-/**
- * POST /api/chat - Send a chat message
+ * POST /api/chat - Send a chat message and get a single-slide presentation
  */
 export const POST: RequestHandler = async ({ request }) => {
 	try {
@@ -43,40 +29,26 @@ export const POST: RequestHandler = async ({ request }) => {
 			);
 		}
 
-		// Get chat agent for session
-		const agent = getChatAgent(sessionId);
-
-		// Get response
-		const response = await agent.chat(message);
-
-		// Convert components to timeline events
-		const events: any[] = [];
+		// Use SimpleAgent to generate a single-slide presentation
+		const agent = new SimpleAgent(ANTHROPIC_API_KEY, OPENAI_API_KEY, 'claude-haiku');
 		
-		// Add speak event
-		if (response.text) {
-			events.push({
-				type: 'speak',
-				text: response.text,
-				timestamp: 0
-			});
+		// Get the first (and only) slide from the stream
+		let presentation = null;
+		for await (const pres of agent.streamMessage(message, sessionId)) {
+			presentation = pres;
+			break; // Only take the first slide
 		}
 
-		// Add component events
-		response.components.forEach((component, index) => {
-			events.push({
-				type: 'add',
-				component,
-				transition: 'fade',
-				timestamp: index * 300 // Stagger components
-			});
-		});
+		if (!presentation) {
+			return json(
+				{ error: 'Failed to generate response' },
+				{ status: 500 }
+			);
+		}
 
 		return json({
 			success: true,
-			text: response.text,
-			components: response.components,
-			events, // Timeline events for presentation store
-			conversationId: response.conversationId
+			presentation
 		});
 	} catch (error) {
 		console.error('Chat API error:', error);
@@ -90,78 +62,4 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 };
 
-/**
- * DELETE /api/chat - Reset conversation for a session
- */
-export const DELETE: RequestHandler = async ({ url }) => {
-	try {
-		const sessionId = url.searchParams.get('sessionId');
 
-		if (!sessionId) {
-			return json(
-				{ error: 'Session ID is required' },
-				{ status: 400 }
-			);
-		}
-
-		// Reset or remove agent
-		const agent = chatAgents.get(sessionId);
-		if (agent) {
-			agent.reset();
-		}
-
-		return json({ success: true });
-	} catch (error) {
-		console.error('Chat reset error:', error);
-		return json(
-			{
-				error: 'Failed to reset conversation',
-				details: error instanceof Error ? error.message : 'Unknown error'
-			},
-			{ status: 500 }
-		);
-	}
-};
-
-/**
- * GET /api/chat - Get conversation history
- */
-export const GET: RequestHandler = async ({ url }) => {
-	try {
-		const sessionId = url.searchParams.get('sessionId');
-
-		if (!sessionId) {
-			return json(
-				{ error: 'Session ID is required' },
-				{ status: 400 }
-			);
-		}
-
-		const agent = chatAgents.get(sessionId);
-		if (!agent) {
-			return json({
-				success: true,
-				messages: [],
-				components: []
-			});
-		}
-
-		const history = agent.getHistory();
-		const registry = agent.getRegistry();
-
-		return json({
-			success: true,
-			messages: history.getAllMessages(),
-			components: registry.list()
-		});
-	} catch (error) {
-		console.error('Chat history error:', error);
-		return json(
-			{
-				error: 'Failed to get conversation history',
-				details: error instanceof Error ? error.message : 'Unknown error'
-			},
-			{ status: 500 }
-		);
-	}
-};

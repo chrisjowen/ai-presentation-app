@@ -99,35 +99,11 @@
 			if (response.ok) {
 				const data = await response.json();
 
-				// Build presentation with question header + response events
-				const events: any[] = [
-					{
-						type: 'clear',
-						transition: 'fade'
-					},
-					{
-						type: 'add',
-						component: {
-							id: 'question-header',
-							type: 'text',
-							content: currentQuestion,
-							variant: 'heading',
-							align: 'left'
-						},
-						transition: 'fade'
-					},
-					...data.events
-				];
-
-				const presentation = {
-					id: `chat-${Date.now()}`,
-					sessionId,
-					events,
-					createdAt: Date.now()
-				};
-				
-				await presentationStore.loadPresentation(presentation);
-				presentationStore.play();
+				// Load the presentation directly (SimpleAgent already formatted it)
+				if (data.presentation) {
+					await presentationStore.loadPresentation(data.presentation);
+					presentationStore.play();
+				}
 			}
 		} catch (error) {
 			console.error('Failed to send message:', error);
